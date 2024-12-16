@@ -1,0 +1,6 @@
+services:
+  hashkorea:
+    image: ${DOCKER_REGISTRY-}hashkorea
+    build:
+      context: .
+      dockerfile: HashKorea/Dockerfile

@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashKorea", "HashKorea\HashKorea.csproj", "{7B54DD39-10B7-47A4-B503-D063C2E2F349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashKorea.AppHost", "HashKorea.AppHost\HashKorea.AppHost.csproj", "{2E5C77C3-3BD3-4389-B52F-EC3CAB714F6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashKorea.ServiceDefaults", "HashKorea.ServiceDefaults\HashKorea.ServiceDefaults.csproj", "{0DA7EDF3-9A3B-4D4E-8563-ABD38076EA09}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{920894D2-CFC8-4F1F-A06A-3294F6D6AF55}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7B54DD39-10B7-47A4-B503-D063C2E2F349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B54DD39-10B7-47A4-B503-D063C2E2F349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B54DD39-10B7-47A4-B503-D063C2E2F349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B54DD39-10B7-47A4-B503-D063C2E2F349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E5C77C3-3BD3-4389-B52F-EC3CAB714F6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5C77C3-3BD3-4389-B52F-EC3CAB714F6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5C77C3-3BD3-4389-B52F-EC3CAB714F6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5C77C3-3BD3-4389-B52F-EC3CAB714F6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DA7EDF3-9A3B-4D4E-8563-ABD38076EA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA7EDF3-9A3B-4D4E-8563-ABD38076EA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA7EDF3-9A3B-4D4E-8563-ABD38076EA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA7EDF3-9A3B-4D4E-8563-ABD38076EA09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{920894D2-CFC8-4F1F-A06A-3294F6D6AF55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{920894D2-CFC8-4F1F-A06A-3294F6D6AF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{920894D2-CFC8-4F1F-A06A-3294F6D6AF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{920894D2-CFC8-4F1F-A06A-3294F6D6AF55}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
