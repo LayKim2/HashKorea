@@ -17,9 +17,4 @@
     <ProjectReference Include="..\HashKorea.ServiceDefaults\HashKorea.ServiceDefaults.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Community\" />
-    <Folder Include="Views\InfoCenter\" />
-  </ItemGroup>
-
 </Project>

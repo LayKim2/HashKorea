@@ -1,0 +1,314 @@
+﻿@{
+    ViewData["Title"] = "Promotions";
+}
+<div class="search-container">
+    <form method="post">
+        <div class="search-grid">
+            <div class="search-item">
+                <label>Search Period</label>
+                <select class="modern-select">
+                    <option value="">Select Period</option>
+                    <option value="all">All</option>
+                </select>
+            </div>
+
+            <div class="search-item">
+                <label>News Type</label>
+                <select class="modern-select">
+                    <option value="">All Types</option>
+                </select>
+            </div>
+
+            <div class="search-item">
+                <label>Category</label>
+                <select class="modern-select">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+
+            <div class="search-item">
+                <label>Region</label>
+                <select class="modern-select">
+                    <option value="">All Regions</option>
+                </select>
+            </div>
+
+            <div class="search-item">
+                <label>Author</label>
+                <select class="modern-select">
+                    <option value="">All Authors</option>
+                </select>
+            </div>
+
+            <div class="search-item search-keyword">
+                <label>Search Keyword</label>
+                <input type="text" class="modern-input" placeholder="Enter keywords...">
+            </div>
+        </div>
+
+        <div class="search-button-container">
+            <button type="submit" class="search-button">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="image-list-container">
+    <div class="result-header">
+        <h2 class="result-count">Total Results: <span class="highlight">10</span></h2>
+        <form asp-area="" asp-controller="User" asp-action="Post">
+            <button type="submit" class="post-button">Post</button>
+        </form>
+    </div>
+    <div class="image-grid">
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Random Image">
+            </div>
+            <div class="category">Travel</div>
+            <h3 class="image-title">A Historical Journey Through Gyeongbokgung Palace</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Digital Art">
+            </div>
+            <div class="category">Art</div>
+            <h3 class="image-title">Digital Art Exhibition at DDP</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Namsan Tower">
+            </div>
+            <div class="category">Landmark</div>
+            <h3 class="image-title">N Seoul Tower: The Heart of the City</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Hanok Village">
+            </div>
+            <div class="category">Heritage</div>
+            <h3 class="image-title">Exploring Seoul's Traditional Hanok Villages</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Street Food">
+            </div>
+            <div class="category">Food</div>
+            <h3 class="image-title">Street Food Adventures in Myeongdong</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Nature">
+            </div>
+            <div class="category">Nature</div>
+            <h3 class="image-title">Seoul's Hidden Gardens and Parks</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Seoul City">
+            </div>
+            <div class="category">Urban</div>
+            <h3 class="image-title">Modern Seoul: A City That Never Sleeps</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Korean Food">
+            </div>
+            <div class="category">Culture</div>
+            <h3 class="image-title">Traditional Korean Cuisine in Modern Times</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Temple">
+            </div>
+            <div class="category">History</div>
+            <h3 class="image-title">Ancient Temples of Seoul</h3>
+        </div>
+
+        <div class="image-item">
+            <div class="image-wrapper">
+                <img src="https://picsum.photos/800/600" alt="Festival">
+            </div>
+            <div class="category">Events</div>
+            <h3 class="image-title">Seoul Lantern Festival 2024</h3>
+        </div>
+    </div>
+</div>
+
+
+
+@* 1. search-container *@
+
+<style>
+    .search-container {
+        background: #ffffff;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .search-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .search-item label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+    .modern-select, .modern-input {
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background: #f8f9fa;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+        .modern-select:hover, .modern-input:hover {
+            border-color: #0099ff;
+        }
+
+        .modern-select:focus, .modern-input:focus {
+            outline: none;
+            border-color: #0099ff;
+            box-shadow: 0 0 0 3px rgba(0, 153, 255, 0.1);
+        }
+
+    .search-keyword {
+        grid-column: span 2;
+    }
+
+    .search-button-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .search-button {
+        background: #0099ff;
+        color: white;
+        border: none;
+        padding: 12px 40px;
+        border-radius: 8px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        .search-button:hover {
+            background: #0088ee;
+        }
+
+</style>
+
+@* 2. image-list-container *@
+<style>
+    .image-list-container {
+        margin-top: 40px;
+    }
+
+    .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .result-count {
+        font-size: 18px;
+        margin-bottom: 20px;
+        margin: 0;
+    }
+
+    .highlight {
+        color: #0099ff;
+        font-weight: bold;
+    }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+    }
+
+    .image-item {
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease;
+    }
+
+        .image-item:hover {
+            transform: translateY(-4px);
+        }
+
+    .image-wrapper {
+        position: relative;
+        padding-bottom: 66.67%; /* 3:2 비율 */
+        overflow: hidden;
+    }
+
+        .image-wrapper img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+    .image-item:hover img {
+        transform: scale(1.05);
+    }
+
+    .category {
+        color: #0099ff;
+        font-size: 14px;
+        padding: 12px 16px 4px;
+    }
+
+    .image-title {
+        font-size: 16px;
+        line-height: 1.4;
+        padding: 0 16px 16px;
+        margin: 0;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .post-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+        .post-button:hover {
+            background-color: #45a049;
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+</style>

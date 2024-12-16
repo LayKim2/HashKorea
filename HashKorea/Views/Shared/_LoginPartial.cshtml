@@ -1,0 +1,113 @@
+﻿<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-4 border-0">
+            <div class="modal-header border-0 p-4">
+                <h5 class="modal-title fw-bold" id="loginModalLabel">Log In</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeLoginModal()"></button>
+            </div>
+            <div class="modal-body px-4 pt-0">
+                <small class="text-muted">
+                    By continuing, you agree to our <a href="#" class="text-primary">User Agreement</a> and acknowledge that you understand the <a href="#" class="text-primary">Privacy Policy</a>.
+                </small>
+
+                <div class="d-grid gap-3 mt-4">
+                    <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-phone"></i> Continue With Phone Number
+                    </button>
+                    <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-google"></i> Continue with Google
+                    </button>
+                    <button class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-apple"></i> Continue With Kakao
+                    </button>
+                </div>
+
+                <div class="text-center my-3">
+                    <span class="text-muted">OR</span>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group mb-3">
+                        <input type="text" class="form-control bg-light" id="userId" name="UserId" placeholder="Email or username" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="password" class="form-control bg-light" id="password" name="Password" placeholder="Password" required>
+                    </div>
+                    <div class="mb-3">
+                        <a href="#" class="text-primary text-decoration-none">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Log In</button>
+                </form>
+
+                <div class="mt-3 text-center">
+                    <span>New to Loplait? </span>
+                    <a href="#" class="text-primary text-decoration-none">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const loginModal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('loginForm');
+
+    function showLoginModal() {
+        $(loginModal).modal('show');
+    }
+
+    function closeLoginModal() {
+        $(loginModal).modal('hide');
+    }
+
+    loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(loginForm);
+        fetch('/Account/Login', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('로그인 성공');
+                    closeLoginModal();
+                } else {
+                    alert('로그인 실패');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+<style>
+    .modal-content {
+        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    }
+
+    .form-control {
+        border: none;
+        padding: 12px;
+        border-radius: 20px;
+    }
+
+    .btn {
+        padding: 12px;
+        border-radius: 20px;
+    }
+
+    .btn-outline-secondary {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+    .modal-title {
+        font-size: 20px;
+    }
+</style>

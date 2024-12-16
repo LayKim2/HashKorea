@@ -1,50 +1,124 @@
-﻿<!DOCTYPE html>
+﻿@await Html.PartialAsync("_LoginPartial")
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HashKorea</title>
-    <script type="importmap"></script>
+    <title>Hash Korea</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HashKorea.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Loplait.styles.css" asp-append-version="true" />
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo1iPI7wSqNQkL9f2QsLpmZ_We5n7xs1g&language=en&callback=initMap" async defer></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <meta property="og:title" content="Loplait" />
+    <meta property="og:type" content="website" />
+    @* <meta property="og:url" content="https://www.loplait.com/" /> *@
+    <meta property="og:image" content="https://www.loplait.com/preview_image.png" />
+    <meta property="og:description" content="Lota Plato Lay" />
+    <meta property="og:site_name" content="Loplait" />
+
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HashKorea</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <div class="navbar-brand d-flex align-items-center">
+                    <img src="~/main-icon.png" alt="Hash Korea Logo" class="me-2" style="height: 40px; width: auto;">
+                    <a class="text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">Hash Korea</a>
+                </div>
+                <div class="d-block d-sm-none">
+                    <div class="d-flex align-items-center">
+                        <a class="btn-login" onclick="showLoginModal()">
+                            <span>Login</span>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+
+                        <div class="d-sm-none mobile-menu">
+                            <!-- Home -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door"></i>
+                                <span>Home</span>
+                            </a>
                         </li>
+
+                        <!-- Information -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <div class="nav-link" onclick="toggleSubmenu('mobile-information')">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Information</span>
+                                    </div>
+                                    <div class="menu-arrow">⌵</div>
+                                </div>
+                            </div>
+                            <div class="submenu" id="mobile-information">
+                                <a class="nav-link ps-4" asp-area="" asp-controller="InfoCenter" asp-action="TourMap"><i class="bi bi-map"></i> Tour Map</a>
+                                <a class="nav-link ps-4" asp-area="" asp-controller="InfoCenter" asp-action="KoreaIs"><i class="bi bi-flag"></i> Korea is</a>
+                                <a class="nav-link ps-4" asp-area="" asp-controller="InfoCenter" asp-action="Promotions"><i class="bi bi-currency-bitcoin"></i> Promotions</a>
+                            </div>
+                        </li>
+
+                        <!-- Community -->
+                        <li class="nav-item">
+                            <div class="nav-link" onclick="toggleSubmenu('mobile-community')">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-people"></i>
+                                        <span>Community</span>
+                                    </div>
+                                    <div class="menu-arrow">⌵</div>
+                                </div>
+                            </div>
+                            <div class="submenu" id="mobile-community">
+                                <a class="nav-link ps-4" asp-area="" asp-controller="Community" asp-action="Notice"><i class="bi bi-exclamation-circle"></i> Notice</a>
+                                <a class="nav-link ps-4" asp-area="" asp-controller="Community" asp-action="FreeBoard"><i class="bi bi-clipboard"></i> Free Board</a>
+                                <a class="nav-link ps-4" asp-area="" asp-controller="Community" asp-action="QnA"><i class="bi bi-question-circle"></i> Q&A</a>
+                            </div>
                         </li>
                     </ul>
+                </div>
+                <div class="d-none d-sm-block">
+                    <a class="btn-login" onclick="showLoginModal()">
+                        <span>Login</span>
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="page-container">
+        @await Html.PartialAsync("_SideMenuPartial")
+        <div class="main-content">
             @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - HashKorea - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    @*     <footer class="border-top footer text-muted">
+        <div class="container text-center">
+            &copy; 2024 - Loplait
         </div>
-    </footer>
+    </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

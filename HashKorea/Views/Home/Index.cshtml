@@ -1,8 +1,398 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="main-section d-flex flex-sm-row flex-column">
+    <div class="main-image">
+        <img src="https://images.unsplash.com/photo-1581090700227-1e37b190418e" alt="Fusion Startup Opening">
+    </div>
+    <div class="main-new-content">
+        <div class="category">STAR POWER</div>
+        <h1>Inside a Fusion Startup's Insane, Top-Secret Opening Ceremony</h1>
+        <div class="author">JARON LANIER</div>
+        <p class="description">Robots! Huge capacitors! A pianist-programmer of impossible skill! One of Silicon Valley's formative figures takes the stage at a wild event.</p>
+    </div>
 </div>
+
+<div class="content-area">
+
+    <div class="related-posts-section">
+        <h3 class="related-title">Popular</h3>
+        <div class="related-posts-wrapper">
+            <button class="nav-button prev-button">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="related-posts-container">
+                <div class="related-posts">
+                    <!-- add post for list-->
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <div class="post-card">
+                            <div class="bookmark-icon">★</div>
+                            <div class="card-content">
+                                <div class="post-author">
+                                    <img src="https://i.pravatar.cc/100" alt="Author" class="author-thumb">
+                                    <div class="author-info">
+                                        <span class="author-name">Author Name</span>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg" alt="KR" class="country-flag">
+                                    </div>
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" alt="맛집 리뷰" class="post-thumbnail">
+                            </div>
+                        </div>
+                    }
+                    <!-- add post for list-->
+                </div>
+            </div>
+            <button class="nav-button next-button">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="related-posts-section">
+        <h3 class="related-title">Lastest</h3>
+        <div class="related-posts-wrapper">
+            <button class="nav-button prev-button">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="related-posts-container">
+                <div class="related-posts">
+                    <!-- add post for list-->
+                    @for (int i = 0; i < 10; i++)
+                    {
+                        <div class="post-card">
+                            <div class="bookmark-icon">★</div>
+                            <div class="card-content">
+                                <div class="post-author">
+                                    <img src="https://i.pravatar.cc/100" alt="Author" class="author-thumb">
+                                    <div class="author-info">
+                                        <span class="author-name">Author Name</span>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg" alt="KR" class="country-flag">
+                                    </div>
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf" alt="맛집 리뷰" class="post-thumbnail">
+                            </div>
+                        </div>
+                    }
+                    <!-- add post for list-->
+                </div>
+            </div>
+            <button class="nav-button next-button">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // content list js - start
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.querySelectorAll('.related-posts-section').forEach(section => {
+            const container = section.querySelector('.related-posts-container');
+            const postsWrapper = section.querySelector('.related-posts');
+            const prevButton = section.querySelector('.prev-button');
+            const nextButton = section.querySelector('.next-button');
+
+            let scrollAmount = 0;
+            const cardWidth = 300; // 카드 너비 + gap
+
+            nextButton.addEventListener('click', () => {
+                scrollAmount += cardWidth;
+                if (scrollAmount > postsWrapper.scrollWidth - container.offsetWidth) {
+                    scrollAmount = postsWrapper.scrollWidth - container.offsetWidth;
+                }
+                postsWrapper.style.transform = `translateX(-${scrollAmount}px)`;
+            });
+
+            prevButton.addEventListener('click', () => {
+                scrollAmount -= cardWidth;
+                if (scrollAmount < 0) {
+                    scrollAmount = 0;
+                }
+                postsWrapper.style.transform = `translateX(-${scrollAmount}px)`;
+            });
+        });
+    });
+
+</script>
+
+@* main new *@
+<style>
+    .main-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        width: 100%;
+    }
+
+    .main-image {
+        width: 60%;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+
+        .main-image:hover {
+            transform: translateY(-4px);
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+            .main-image img:hover {
+                transform: scale(1.02);
+            }
+
+    .main-new-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding-left: 40px;
+        justify-content: center;
+    }
+
+        .main-new-content h1 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: #111;
+        }
+
+    .news-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        width: 100%;
+    }
+
+    .news-image {
+        width: 100%;
+    }
+
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .news-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .category {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .main-content h1 {
+        font-size: clamp(24px, 4vw, 42px);
+        font-weight: bold;
+        margin-bottom: 16px;
+        line-height: 1.2;
+    }
+
+    .author {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 24px;
+        font-weight: 500;
+    }
+
+    .description {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #444;
+        max-width: 90%;
+    }
+
+</style>
+
+
+@* popular/lastest part *@
+<style>
+    .related-posts-section {
+        margin-top: 50px;
+        padding: 20px;
+    }
+
+    .related-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #333;
+    }
+
+    .related-posts-container {
+        position: relative;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 8px 4px;
+    }
+
+    .related-posts {
+        display: flex;
+        gap: 20px;
+    }
+
+    .post-card {
+        flex: 0 0 280px;
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.2s ease;
+    }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+    .bookmark-icon {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        color: white;
+        font-size: 20px;
+        z-index: 2;
+        cursor: pointer;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .card-content {
+        position: relative;
+    }
+
+    .post-author {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 2;
+        color: white;
+    }
+
+    .author-thumb {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+
+    .author-info {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .author-name {
+        font-weight: 500;
+    }
+
+    .author-age {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .post-thumbnail {
+        width: 100%;
+        height: 380px;
+        object-fit: cover;
+    }
+
+    .card-content::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+    }
+
+    .related-posts-wrapper {
+        position: relative;
+        /* padding: 0 40px; */
+    }
+
+    .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        cursor: pointer;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+        .nav-button:hover {
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+    .prev-button {
+        left: 10px;
+    }
+
+    .next-button {
+        right: 10px;
+    }
+
+    .related-posts-container {
+        overflow: hidden;
+    }
+
+    .nav-button i {
+        font-size: 18px;
+        color: #333;
+    }
+
+    .related-posts {
+        display: flex;
+        gap: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .country-flag {
+        width: 24px;
+        height: 18px;
+        margin-left: 4px;
+        border-radius: 2px;
+        vertical-align: middle;
+    }
+
+    .author-info {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+</style>

@@ -1,0 +1,656 @@
+﻿@{
+    ViewData["Title"] = "Tour Map";
+}
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        @* 1. MAP *@
+        <div class="col-md-5 col-12 map-container">
+            <div id="map"></div>
+
+
+            <div class="review-section">
+                <div class="rating-summary">
+                    <div class="rating-score">4.3</div>
+                    <div class="star-rating">★★★★½</div>
+                    <div class="review-count">561 reviews</div>
+                </div>
+
+                <button class="write-review-btn">Write a Review</button>
+
+                <div class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <img src="https://i.pravatar.cc/40" alt="Profile" class="reviewer-avatar">
+                                <div class="reviewer-details">
+                                    <div class="reviewer-name">D. Ryu</div>
+                                    <div class="review-meta">Local Guide · 164 reviews · 386 photos</div>
+                                </div>
+                            </div>
+                            <button class="more-options">⋮</button>
+                        </div>
+                        <div class="review-rating">
+                            <span class="stars">★★★★☆</span>
+                            <span class="review-date">1 month ago</span>
+                        </div>
+                        <div class="review-content">
+                            <p>One of the top restaurants in the lamb skewer street. The lamb skewers taste good and overall quite satisfactory.</p>
+                        </div>
+                        <div class="review-service">
+                            <span>Service</span>
+                            <p>Dine-in...</p>
+                        </div>
+                        <button class="review-more">See more</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        @* 2. CONTENT *@
+        <div class="col-md-7 col-12">
+            <div class="content-area">
+                <div class="blog-post">
+                    <h1 class="post-title">함정 맛집 이가네양꼬치 내돈내산 마포 맛집 추천</h1>
+
+                    <div class="author-info">
+                        <div class="author-container">
+                            <img src="https://i.pravatar.cc/100" alt="Lota" class="author-image">
+                            <span class="author-name">Lota</span>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/640px-Flag_of_South_Korea.svg.png" alt="KR" class="country-flag">
+                            <span class="post-date">2025. 12. 20. 18:40</span>
+                        </div>
+                        <div class="post-actions">
+                            <button class="share-button">Copy URL</button>
+                            <button class="more-button">⋮</button>
+                        </div>
+                    </div>
+
+                    <div class="location-tag">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>이가네양꼬치 함정집</span>
+                    </div>
+
+                    <div class="post-content">
+
+                        <p class="text-center">오늘의 리뷰를 시작합니다</p>
+
+                        <p class="text-center">
+                            진짜진짜 맛있었던 함정 양꼬치<br>
+                            내돈내산 후기입니다 !!!
+                        </p>
+
+                        <p>
+                            실넘 정도 전 프랑스 여행하면서<br>
+                            프랜치레어고 너무 맛있고 냄새나서<br>
+                            양고기에 대해 엄청난 거부감을 갖고있었어요<br>
+                            그래서 그 이후로 양을 한 번도 안먹었는데<br>
+                            오늘에 친구의 강력추천을 받고<br>
+                            용기내서 양꼬치를 먹으러 갔답니다 !!!
+                        </p>
+
+                        <p>
+                            결론은 진짜 너무 맛있었구ㅋㅋㅋ<br>
+                            첫 방문에 뽕까서 4일후에 또 방문했어요!
+                        </p>
+                    </div>
+                </div>
+
+                @* 3. POST LIST *@
+                <div class="related-posts-section">
+                    <h3 class="related-title">You might also enjoy these posts</h3>
+                    <div class="related-posts-wrapper">
+                        <button class="nav-button prev-button">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="related-posts-container">
+                            <div class="related-posts">
+                                <!-- add post for list-->
+                                <div class="post-card">
+                                    <div class="bookmark-icon">★</div>
+                                    <div class="card-content">
+                                        <div class="post-author">
+                                            <img src="https://i.pravatar.cc/100" alt="Plato" class="author-thumb">
+                                            <div class="author-info">
+                                                <span class="author-name">Plato</span>
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg" alt="KR" class="country-flag">
+                                            </div>
+                                        </div>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="맛집 리뷰" class="post-thumbnail">
+                                    </div>
+                                </div>
+                                <div class="post-card">
+                                    <div class="bookmark-icon">★</div>
+                                    <div class="card-content">
+                                        <div class="post-author">
+                                            <img src="https://i.pravatar.cc/100" alt="Lay" class="author-thumb">
+                                            <div class="author-info">
+                                                <span class="author-name">Lay</span>
+                                                <img src="https://media.istockphoto.com/id/1096091340/ko/%EB%B2%A1%ED%84%B0/%EC%98%81%EA%B5%AD-%EA%B5%AD%EA%B8%B0.jpg?s=612x612&w=0&k=20&c=iH5t7wlruahdT8AyHSBAn6N_wYJ-H_9rBtXjRQhvxrc=" alt="UK" class="country-flag">
+                                            </div>
+                                        </div>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="맛집 리뷰" class="post-thumbnail">
+                                    </div>
+                                </div>
+                                <div class="post-card">
+                                    <div class="bookmark-icon">★</div>
+                                    <div class="card-content">
+                                        <div class="post-author">
+                                            <img src="https://i.pravatar.cc/100" alt="Lota" class="author-thumb">
+                                            <div class="author-info">
+                                                <span class="author-name">Lota</span>
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg" alt="KR" class="country-flag">
+                                            </div>
+                                        </div>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="맛집 리뷰" class="post-thumbnail">
+                                    </div>
+                                </div>
+                                <div class="post-card">
+                                    <div class="bookmark-icon">★</div>
+                                    <div class="card-content">
+                                        <div class="post-author">
+                                            <img src="https://i.pravatar.cc/100" alt="Logan" class="author-thumb">
+                                            <div class="author-info">
+                                                <span class="author-name">Logan</span>
+                                                <img src="https://media.istockphoto.com/id/1096091340/ko/%EB%B2%A1%ED%84%B0/%EC%98%81%EA%B5%AD-%EA%B5%AD%EA%B8%B0.jpg?s=612x612&w=0&k=20&c=iH5t7wlruahdT8AyHSBAn6N_wYJ-H_9rBtXjRQhvxrc=" alt="UK" class="country-flag">
+                                            </div>
+                                        </div>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg" alt="맛집 리뷰" class="post-thumbnail">
+                                    </div>
+                                </div>
+                                <!-- add post for list-->
+                            </div>
+                        </div>
+                        <button class="nav-button next-button">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+<script>
+    function setMapHeight() {
+        const mapElement = document.getElementById('map');
+        const mapContainer = document.querySelector('.map-container');
+
+        const containerWidth = mapContainer.offsetWidth;
+
+        mapElement.style.height = `${containerWidth}px`;
+    }
+
+    function initMap() {
+        var location = { lat: 37.5025, lng: 127.0204 };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: location
+        });
+
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+    }
+
+    // when page is loaded
+    window.onload = function () {
+        setMapHeight();
+        initMap();
+    };
+
+    // when the boroower size is changed
+    window.onresize = setMapHeight;
+
+    // content list js - start
+    document.addEventListener('DOMContentLoaded', function () {
+        const container = document.querySelector('.related-posts-container');
+        const postsWrapper = document.querySelector('.related-posts');
+        const prevButton = document.querySelector('.prev-button');
+        const nextButton = document.querySelector('.next-button');
+
+        let scrollAmount = 0;
+        const cardWidth = 300; // 카드 너비 + gap
+
+        nextButton.addEventListener('click', () => {
+            scrollAmount += cardWidth;
+            if (scrollAmount > postsWrapper.scrollWidth - container.offsetWidth) {
+                scrollAmount = postsWrapper.scrollWidth - container.offsetWidth;
+            }
+            postsWrapper.style.transform = `translateX(-${scrollAmount}px)`;
+        });
+
+        prevButton.addEventListener('click', () => {
+            scrollAmount -= cardWidth;
+            if (scrollAmount < 0) {
+                scrollAmount = 0;
+            }
+            postsWrapper.style.transform = `translateX(-${scrollAmount}px)`;
+        });
+    });
+
+
+</script>
+
+
+@* map && content *@
+<style>
+
+    /*google map*/
+    .map-container {
+        padding: 0;
+    }
+
+    #map {
+        width: 100%;
+        height: auto;
+    }
+
+    .content-area {
+        padding: 20px;
+        background-color: #fff;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .post-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .author-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .author-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .author-image {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-name {
+        font-weight: 500;
+    }
+
+    .post-date {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .post-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .share-button, .more-button {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+    }
+
+    .location-tag {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #2DB400;
+        margin-bottom: 20px;
+    }
+
+    .content-image {
+        max-width: 100%;
+        height: auto;
+        margin: 20px auto;
+        display: block;
+    }
+
+    .post-content {
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .blog-post {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+</style>
+
+@* content list *@
+<style>
+    .related-posts-section {
+        margin-top: 50px;
+        padding: 20px;
+    }
+
+    .related-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #333;
+    }
+
+    .related-posts-container {
+        position: relative;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 8px 4px;
+    }
+
+    .related-posts {
+        display: flex;
+        gap: 20px;
+    }
+
+    .post-card {
+        flex: 0 0 280px;
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.2s ease;
+    }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+    .bookmark-icon {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        color: white;
+        font-size: 20px;
+        z-index: 2;
+        cursor: pointer;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .card-content {
+        position: relative;
+    }
+
+    .post-author {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 2;
+        color: white;
+    }
+
+    .author-thumb {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+
+    .author-info {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .author-name {
+        font-weight: 500;
+    }
+
+    .author-age {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .post-thumbnail {
+        width: 100%;
+        height: 380px;
+        object-fit: cover;
+    }
+
+    .card-content::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+    }
+
+    .related-posts-wrapper {
+        position: relative;
+        /* padding: 0 40px; */
+    }
+
+    .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        cursor: pointer;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+        .nav-button:hover {
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+    .prev-button {
+        left: 10px;
+    }
+
+    .next-button {
+        right: 10px;
+    }
+
+    .related-posts-container {
+        overflow: hidden;
+    }
+
+    .nav-button i {
+        font-size: 18px;
+        color: #333;
+    }
+
+    .related-posts {
+        display: flex;
+        gap: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .country-flag {
+        width: 24px;
+        height: 18px;
+        margin-left: 4px;
+        border-radius: 2px;
+        vertical-align: middle;
+    }
+
+    .author-info {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+</style>
+
+@* review section *@
+<style>
+
+    .review-section {
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+
+    .rating-summary {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .rating-score {
+        font-size: 36px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .star-rating {
+        color: #ffd700;
+        font-size: 24px;
+        margin: 8px 0;
+    }
+
+    .review-count {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .write-review-btn {
+        width: 100%;
+        padding: 12px;
+        background: #2DB400;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 16px 0;
+        cursor: pointer;
+    }
+
+    .review-item {
+        border-top: 1px solid #eee;
+        padding: 20px 0;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .reviewer-info {
+        display: flex;
+        gap: 12px;
+    }
+
+    .reviewer-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .reviewer-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reviewer-name {
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .review-meta {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .more-options {
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: #666;
+        cursor: pointer;
+    }
+
+    .review-rating {
+        margin: 12px 0;
+    }
+
+    .stars {
+        color: #ffd700;
+        margin-right: 8px;
+    }
+
+    .review-date {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .review-content {
+        margin: 12px 0;
+        line-height: 1.5;
+    }
+
+    .review-service {
+        background: #f8f8f8;
+        padding: 12px;
+        border-radius: 4px;
+        margin: 12px 0;
+    }
+
+        .review-service span {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+    .review-more {
+        color: #2DB400;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+</style>

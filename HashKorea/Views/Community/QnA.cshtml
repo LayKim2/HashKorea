@@ -1,0 +1,330 @@
+﻿@{
+    ViewData["Title"] = "QnA";
+}
+
+<div class="board-container">
+    <div class="result-header">
+        <h2 class="result-count"> Q&A <span class="highlight"></span></h2>
+        <form asp-area="" asp-controller="User" asp-action="Post">
+            <button type="submit" class="post-button">Post</button>
+        </form>
+    </div>
+    <div class="post-list">
+
+        <div class="post-item">
+            <div class="post-avatar">
+                <div class="avatar-circle">SO</div>
+            </div>
+            <div class="post-main">
+                <div class="post-header">
+                    <span class="author">SA</span>
+                    <span class="post-date">posted 1 day ago</span>
+                </div>
+                <h3 class="post-title">Google Search Engine Gets Major AI Overhaul</h3>
+                <div class="post-content">
+                    The latest AI developments from Google represent a significant leap forward in search technology. This update introduces more intuitive search algorithms and enhanced natural language processing capabilities, aiming to provide users with more accurate and contextually relevant results.
+                </div>
+            </div>
+            <div class="post-actions">
+                <div class="action-group">
+                    <span class="likes"><i class="bi bi-hand-thumbs-up"></i> 2</span>
+                    <span class="comments"><i class="bi bi-chat"></i> 0</span>
+                </div>
+                <button class="toggle-btn">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="post-item">
+            <div class="post-avatar">
+                <div class="avatar-circle">SO</div>
+            </div>
+            <div class="post-main">
+                <div class="post-header">
+                    <span class="author">SA</span>
+                    <span class="post-date">posted 1 day ago</span>
+                </div>
+                <h3 class="post-title">OpenAI Partners with Reddit for ChatGPT Training Data</h3>
+                <div class="post-content">
+                    OpenAI announces a groundbreaking partnership with Reddit to enhance ChatGPT's training capabilities. This collaboration aims to improve user interaction patterns and generate more contextually appropriate responses through real-world conversation data.
+                </div>
+            </div>
+            <div class="post-actions">
+                <div class="action-group">
+                    <span class="likes"><i class="bi bi-hand-thumbs-up"></i> 1</span>
+                    <span class="comments"><i class="bi bi-chat"></i> 0</span>
+                </div>
+                <button class="toggle-btn">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="post-item">
+            <div class="post-avatar">
+                <div class="avatar-circle">SO</div>
+            </div>
+            <div class="post-main">
+                <div class="post-header">
+                    <span class="author">SA</span>
+                    <span class="post-date">posted 1 day ago</span>
+                </div>
+                <h3 class="post-title">ChatGPT Introduces Direct Integration with Google Drive and OneDrive</h3>
+                <div class="post-content">
+                    ChatGPT's latest update brings seamless integration with major cloud storage platforms. Users can now directly access and analyze documents stored in Google Drive and OneDrive, streamlining workflow and enhancing productivity.
+                </div>
+            </div>
+            <div class="post-actions">
+                <div class="action-group">
+                    <span class="likes"><i class="bi bi-hand-thumbs-up"></i> 3</span>
+                    <span class="comments"><i class="bi bi-chat"></i> 0</span>
+                </div>
+                <button class="toggle-btn">
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    const postItems = document.querySelectorAll('.post-item');
+
+    postItems.forEach(item => {
+        const toggleBtn = item.querySelector('.toggle-btn');
+        const content = item.querySelector('.post-content');
+        const actions = item.querySelector('.post-actions');
+        const icon = toggleBtn.querySelector('i');
+
+        // post-item 전체 영역에 클릭 이벤트 추가
+        item.addEventListener('click', () => {
+            content.classList.toggle('show');
+            actions.classList.toggle('hide');
+            icon.classList.toggle('bi-chevron-up');
+            icon.classList.toggle('bi-chevron-down');
+        });
+
+        // toggle-btn에 클릭 이벤트 추가
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            content.classList.toggle('show');
+            actions.classList.toggle('hide');
+            icon.classList.toggle('bi-chevron-up');
+            icon.classList.toggle('bi-chevron-down');
+        });
+
+        // 좋아요, 댓글 버튼 등 다른 버튼들의 이벤트 전파 중지
+        const actionButtons = item.querySelectorAll('.action-group span');
+        actionButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        });
+    });
+
+
+</script>
+
+<style>
+    body {
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .board-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        padding: 12px;
+    }
+
+    .post-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .post-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 16px;
+        background-color: white;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+        cursor: pointer;
+        border: 1px solid #e0e0e0;
+    }
+
+        .post-item:hover {
+            background-color: #f8f9fa;
+        }
+
+
+    .toggle-btn i {
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .toggle-btn i.bi-chevron-up {
+            transform: rotate(-180deg);
+        }
+
+    .toggle-btn {
+        border: none;
+        background: none;
+        padding: 4px;
+        cursor: pointer;
+        color: #666;
+        transition: transform 0.2s ease;
+    }
+
+        .toggle-btn:hover {
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+
+    .avatar-circle {
+        margin-top: 4px;
+        width: 40px;
+        height: 40px;
+        background-color: #1b5e20;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+    }
+
+    .post-main {
+        flex: 1;
+        margin: 0 16px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .post-main.expanded {
+            margin-right: 0;
+            flex: 1;
+        }
+
+    .post-header {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+
+    .author {
+        font-weight: 500;
+    }
+
+    .post-date {
+        color: #666;
+        font-size: 0.9em;
+    }
+
+    .post-title {
+        margin: 0;
+        font-size: 1.1em;
+        font-weight: 500;
+    }
+
+    .post-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        opacity: 1;
+        max-height: 40px;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+        flex-shrink: 0;
+    }
+
+        .post-actions.hide {
+            opacity: 0;
+            max-height: 0;
+            margin: 0;
+            flex: 0;
+        }
+
+    .post-content {
+        max-height: 0;
+        overflow: hidden;
+        margin-top: 0;
+        transition: all 0.3s ease-in-out;
+        opacity: 0;
+        width: 100%;
+        border-top: 1px solid #eee;
+        padding-top: 12px;
+    }
+
+        .post-content.show {
+            max-height: 500px;
+            margin-top: 12px;
+            opacity: 1;
+        }
+
+    .action-group {
+        display: flex;
+        gap: 16px;
+    }
+
+        .action-group span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #666;
+        }
+
+    .more-btn {
+        border: none;
+        background: none;
+        padding: 4px;
+        cursor: pointer;
+        color: #666;
+    }
+
+        .more-btn:hover {
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+</style>
+
+
+@* button *@
+<style>
+    .result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+
+    .post-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+        .post-button:hover {
+            background-color: #45a049;
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+</style>

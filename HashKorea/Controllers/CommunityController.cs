@@ -4,16 +4,31 @@ using HashKorea.Models;
 
 namespace HashKorea.Controllers;
 
-public class HomeController : Controller
+public class CommunityController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<CommunityController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public CommunityController(ILogger<CommunityController> logger)
     {
         _logger = logger;
     }
 
     public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult Notice()
+    {
+        return View();
+    }
+
+    public IActionResult FreeBoard()
+    {
+        return View();
+    }
+
+    public IActionResult QnA()
     {
         return View();
     }

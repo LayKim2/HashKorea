@@ -1,0 +1,89 @@
+﻿<nav class="sidebar">
+    <div class="side-menu">
+        <!-- Home -->
+        <a class="menu-item" asp-area="" asp-controller="Home" asp-action="Index">
+            <div class="menu-title">
+                <i class="bi bi-house-door"></i>
+                <span>Home</span>
+            </div>
+        </a>
+        <!-- Information -->
+        <div class="menu-category">
+            <div class="menu-item" onclick="toggleSubmenu('information')">
+                <div class="menu-title">
+                    <i class="bi bi-info-circle"></i>
+                    <span>Information</span>
+                </div>
+                <div class="menu-arrow">⌵</div>
+            </div>
+            <div class="submenu" id="information">
+                <a class="menu-item" asp-area="" asp-controller="InfoCenter" asp-action="TourMap">
+                    <div class="menu-title">
+                        <i class="bi bi-map"></i>
+                        <span>Tour Map</span>
+                    </div>
+                </a>
+                <a class="menu-item" asp-area="" asp-controller="InfoCenter" asp-action="KoreaIs">
+                    <div class="menu-title">
+                        <i class="bi bi-flag"></i>
+                        <span>Korea is</span>
+                    </div>
+                </a>
+                <a class="menu-item" asp-area="" asp-controller="InfoCenter" asp-action="Promotions">
+                    <div class="menu-title">
+                        <i class="bi bi-currency-bitcoin"></i>
+                        <span>Promotions</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Community -->
+        <div class="menu-category">
+            <div class="menu-item" onclick="toggleSubmenu('community')">
+                <div class="menu-title">
+                    <i class="bi bi-people"></i>
+                    <span>Community</span>
+                </div>
+                <div class="menu-arrow">⌵</div>
+            </div>
+            <div class="submenu" id="community">
+                <a class="menu-item" asp-area="" asp-controller="Community" asp-action="Notice">
+                    <div class="menu-title">
+                        <i class="bi bi-exclamation-circle"></i>
+                        <span>Notice</span>
+                    </div>
+                </a>
+                <a class="menu-item" asp-area="" asp-controller="Community" asp-action="FreeBoard">
+                    <div class="menu-title">
+                        <i class="bi bi-clipboard"></i>
+                        <span>Free Board</span>
+                    </div>
+                </a>
+                <a class="menu-item" asp-area="" asp-controller="Community" asp-action="QnA">
+                    <div class="menu-title">
+                        <i class="bi bi-question-circle"></i>
+                        <span>Q&A</span>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<script>
+    function toggleSubmenu(id) {
+        const submenu = document.getElementById(id);
+        const menuItem = event.currentTarget;
+        const arrow = menuItem.querySelector('.menu-arrow');
+
+        if (submenu.style.maxHeight) {
+            submenu.style.maxHeight = null;
+            arrow.style.transform = 'rotate(0deg)';  // 원래 상태로
+        } else {
+            submenu.style.maxHeight = submenu.scrollHeight + "px";
+            arrow.style.transform = 'rotate(180deg)';  // 위로 회전
+        }
+    }
+</script>
