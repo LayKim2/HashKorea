@@ -2,6 +2,210 @@
     ViewData["Title"] = "Notice";
 }
 
+@section Styles {
+    <style>
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .board-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 12px;
+        }
+
+        .post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .post-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px;
+            background-color: white;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+        }
+
+            .post-item:hover {
+                background-color: #f8f9fa;
+            }
+
+
+        .toggle-btn i {
+            transition: transform 0.3s ease-in-out;
+        }
+
+            .toggle-btn i.bi-chevron-up {
+                transform: rotate(-180deg);
+            }
+
+        .toggle-btn {
+            border: none;
+            background: none;
+            padding: 4px;
+            cursor: pointer;
+            color: #666;
+            transition: transform 0.2s ease;
+        }
+
+            .toggle-btn:hover {
+                background-color: #f5f5f5;
+                border-radius: 50%;
+            }
+
+        .avatar-circle {
+            margin-top: 4px;
+            width: 40px;
+            height: 40px;
+            background-color: #1b5e20;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        .post-main {
+            flex: 1;
+            margin: 0 16px;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .post-main.expanded {
+                margin-right: 0;
+                flex: 1;
+            }
+
+        .post-header {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .author {
+            font-weight: 500;
+        }
+
+        .post-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .post-title {
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 1;
+            max-height: 40px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            flex-shrink: 0;
+        }
+
+            .post-actions.hide {
+                opacity: 0;
+                max-height: 0;
+                margin: 0;
+                flex: 0;
+            }
+
+        .post-content {
+            max-height: 0;
+            overflow: hidden;
+            margin-top: 0;
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+            width: 100%;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+        }
+
+            .post-content.show {
+                max-height: 500px;
+                margin-top: 12px;
+                opacity: 1;
+            }
+
+        .action-group {
+            display: flex;
+            gap: 16px;
+        }
+
+            .action-group span {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                color: #666;
+            }
+
+        .more-btn {
+            border: none;
+            background: none;
+            padding: 4px;
+            cursor: pointer;
+            color: #666;
+        }
+
+            .more-btn:hover {
+                background-color: #f5f5f5;
+                border-radius: 50%;
+            }
+
+    </style>
+
+
+    @* button *@
+    <style>
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+
+        .post-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+            .post-button:hover {
+                background-color: #45a049;
+                box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+            }
+    </style>
+}
+
 <div class="board-container">
     <div class="result-header">
         <h2 class="result-count">Notice<span class="highlight"></span></h2>
@@ -128,204 +332,3 @@
 
 </script>
 
-<style>
-    body {
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-    }
-
-    .board-container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        background-color: white;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        border-radius: 8px;
-        overflow: hidden;
-        padding: 12px;
-    }
-
-    .post-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .post-item {
-        display: flex;
-        align-items: flex-start;
-        padding: 16px;
-        background-color: white;
-        border-radius: 8px;
-        transition: background-color 0.2s ease;
-        cursor: pointer;
-        border: 1px solid #e0e0e0;
-    }
-
-        .post-item:hover {
-            background-color: #f8f9fa;
-        }
-
-
-    .toggle-btn i {
-        transition: transform 0.3s ease-in-out;
-    }
-
-        .toggle-btn i.bi-chevron-up {
-            transform: rotate(-180deg);
-        }
-
-    .toggle-btn {
-        border: none;
-        background: none;
-        padding: 4px;
-        cursor: pointer;
-        color: #666;
-        transition: transform 0.2s ease;
-    }
-
-        .toggle-btn:hover {
-            background-color: #f5f5f5;
-            border-radius: 50%;
-        }
-
-    .avatar-circle {
-        margin-top: 4px;
-        width: 40px;
-        height: 40px;
-        background-color: #1b5e20;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 500;
-    }
-
-    .post-main {
-        flex: 1;
-        margin: 0 16px;
-        transition: all 0.3s ease-in-out;
-    }
-
-        .post-main.expanded {
-            margin-right: 0;
-            flex: 1;
-        }
-
-    .post-header {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        margin-bottom: 4px;
-    }
-
-    .author {
-        font-weight: 500;
-    }
-
-    .post-date {
-        color: #666;
-        font-size: 0.9em;
-    }
-
-    .post-title {
-        margin: 0;
-        font-size: 1.1em;
-        font-weight: 500;
-    }
-
-    .post-actions {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        opacity: 1;
-        max-height: 40px;
-        overflow: hidden;
-        transition: all 0.3s ease-in-out;
-        flex-shrink: 0;
-    }
-
-        .post-actions.hide {
-            opacity: 0;
-            max-height: 0;
-            margin: 0;
-            flex: 0;
-        }
-
-    .post-content {
-        max-height: 0;
-        overflow: hidden;
-        margin-top: 0;
-        transition: all 0.3s ease-in-out;
-        opacity: 0;
-        width: 100%;
-        border-top: 1px solid #eee;
-        padding-top: 12px;
-    }
-
-        .post-content.show {
-            max-height: 500px;
-            margin-top: 12px;
-            opacity: 1;
-        }
-
-    .action-group {
-        display: flex;
-        gap: 16px;
-    }
-
-        .action-group span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: #666;
-        }
-
-    .more-btn {
-        border: none;
-        background: none;
-        padding: 4px;
-        cursor: pointer;
-        color: #666;
-    }
-
-        .more-btn:hover {
-            background-color: #f5f5f5;
-            border-radius: 50%;
-        }
-
-</style>
-
-
-@* button *@
-<style>
-    .result-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-
-    .post-button {
-        background-color: #4CAF50;
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        transition-duration: 0.4s;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-        .post-button:hover {
-            background-color: #45a049;
-            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-        }
-</style>

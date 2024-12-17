@@ -1,4 +1,37 @@
-﻿<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+﻿
+@section Styles {
+    <style>
+        .modal-content {
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .form-control {
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+        }
+
+        .btn {
+            padding: 12px;
+            border-radius: 20px;
+        }
+
+        .btn-outline-secondary {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: #e9ecef;
+            }
+
+        .modal-title {
+            font-size: 20px;
+        }
+    </style>
+}
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content rounded-4 border-0">
             <div class="modal-header border-0 p-4">
@@ -82,32 +115,4 @@
     });
 </script>
 
-<style>
-    .modal-content {
-        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-    }
 
-    .form-control {
-        border: none;
-        padding: 12px;
-        border-radius: 20px;
-    }
-
-    .btn {
-        padding: 12px;
-        border-radius: 20px;
-    }
-
-    .btn-outline-secondary {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-    }
-
-        .btn-outline-secondary:hover {
-            background-color: #e9ecef;
-        }
-
-    .modal-title {
-        font-size: 20px;
-    }
-</style>

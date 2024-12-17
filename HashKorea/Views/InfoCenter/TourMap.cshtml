@@ -2,8 +2,415 @@
     ViewData["Title"] = "Tour Map";
 }
 
+@section Styles {
+    @* map && content *@
+    <style>
 
+        /*google map*/
+        .map-container {
+            padding: 0;
+        }
 
+        #map {
+            width: 100%;
+            height: auto;
+        }
+
+        .content-area {
+            padding: 20px;
+            background-color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .author-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .author-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .author-image {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-name {
+            font-weight: 500;
+        }
+
+        .post-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-button, .more-button {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .location-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #2DB400;
+            margin-bottom: 20px;
+        }
+
+        .content-image {
+            max-width: 100%;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .post-content {
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .blog-post {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+
+    @* content list *@
+    <style>
+        .related-posts-section {
+            margin-top: 50px;
+            padding: 20px;
+        }
+
+        .related-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #333;
+        }
+
+        .related-posts-container {
+            position: relative;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 8px 4px;
+        }
+
+        .related-posts {
+            display: flex;
+            gap: 20px;
+        }
+
+        .post-card {
+            flex: 0 0 280px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.2s ease;
+        }
+
+            .post-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            }
+
+        .bookmark-icon {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: white;
+            font-size: 20px;
+            z-index: 2;
+            cursor: pointer;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .card-content {
+            position: relative;
+        }
+
+        .post-author {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2;
+            color: white;
+        }
+
+        .author-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .author-name {
+            font-weight: 500;
+        }
+
+        .author-age {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .post-thumbnail {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+        }
+
+        .card-content::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+        }
+
+        .related-posts-wrapper {
+            position: relative;
+            /* padding: 0 40px; */
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+            .nav-button:hover {
+                background: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            }
+
+        .prev-button {
+            left: 10px;
+        }
+
+        .next-button {
+            right: 10px;
+        }
+
+        .related-posts-container {
+            overflow: hidden;
+        }
+
+        .nav-button i {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .related-posts {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .country-flag {
+            width: 24px;
+            height: 18px;
+            margin-left: 4px;
+            border-radius: 2px;
+            vertical-align: middle;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+    </style>
+
+    @* review section *@
+    <style>
+
+        .review-section {
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .rating-summary {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .rating-score {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .star-rating {
+            color: #ffd700;
+            font-size: 24px;
+            margin: 8px 0;
+        }
+
+        .review-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .write-review-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2DB400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 16px 0;
+            cursor: pointer;
+        }
+
+        .review-item {
+            border-top: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .reviewer-info {
+            display: flex;
+            gap: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .reviewer-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reviewer-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .review-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .more-options {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .review-rating {
+            margin: 12px 0;
+        }
+
+        .stars {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+
+        .review-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .review-content {
+            margin: 12px 0;
+            line-height: 1.5;
+        }
+
+        .review-service {
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+
+            .review-service span {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 4px;
+            }
+
+        .review-more {
+            color: #2DB400;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+    </style>
+}
 
 <div class="container-fluid">
     <div class="row">
@@ -181,9 +588,6 @@
     </div>
 </div>
 
-
-
-
 <script>
     function setMapHeight() {
         const mapElement = document.getElementById('map');
@@ -247,410 +651,3 @@
 </script>
 
 
-@* map && content *@
-<style>
-
-    /*google map*/
-    .map-container {
-        padding: 0;
-    }
-
-    #map {
-        width: 100%;
-        height: auto;
-    }
-
-    .content-area {
-        padding: 20px;
-        background-color: #fff;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    .post-title {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .author-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .author-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .author-image {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .author-name {
-        font-weight: 500;
-    }
-
-    .post-date {
-        color: #666;
-        font-size: 14px;
-    }
-
-    .post-actions {
-        display: flex;
-        gap: 10px;
-    }
-
-    .share-button, .more-button {
-        padding: 5px 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background: white;
-        cursor: pointer;
-    }
-
-    .location-tag {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #2DB400;
-        margin-bottom: 20px;
-    }
-
-    .content-image {
-        max-width: 100%;
-        height: auto;
-        margin: 20px auto;
-        display: block;
-    }
-
-    .post-content {
-        line-height: 1.6;
-        font-size: 16px;
-    }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .blog-post {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-</style>
-
-@* content list *@
-<style>
-    .related-posts-section {
-        margin-top: 50px;
-        padding: 20px;
-    }
-
-    .related-title {
-        font-size: 20px;
-        font-weight: 600;
-        margin-bottom: 24px;
-        color: #333;
-    }
-
-    .related-posts-container {
-        position: relative;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        padding: 8px 4px;
-    }
-
-    .related-posts {
-        display: flex;
-        gap: 20px;
-    }
-
-    .post-card {
-        flex: 0 0 280px;
-        position: relative;
-        border-radius: 12px;
-        overflow: hidden;
-        background: white;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        transition: all 0.2s ease;
-    }
-
-        .post-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-        }
-
-    .bookmark-icon {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        color: white;
-        font-size: 20px;
-        z-index: 2;
-        cursor: pointer;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    .card-content {
-        position: relative;
-    }
-
-    .post-author {
-        position: absolute;
-        bottom: 12px;
-        left: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        z-index: 2;
-        color: white;
-    }
-
-    .author-thumb {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        border: 2px solid white;
-    }
-
-    .author-info {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    }
-
-    .author-name {
-        font-weight: 500;
-    }
-
-    .author-age {
-        font-size: 14px;
-        opacity: 0.9;
-    }
-
-    .post-thumbnail {
-        width: 100%;
-        height: 380px;
-        object-fit: cover;
-    }
-
-    .card-content::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 50%;
-        background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-    }
-
-    .related-posts-wrapper {
-        position: relative;
-        /* padding: 0 40px; */
-    }
-
-    .nav-button {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        cursor: pointer;
-        z-index: 3;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-    }
-
-        .nav-button:hover {
-            background: white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-    .prev-button {
-        left: 10px;
-    }
-
-    .next-button {
-        right: 10px;
-    }
-
-    .related-posts-container {
-        overflow: hidden;
-    }
-
-    .nav-button i {
-        font-size: 18px;
-        color: #333;
-    }
-
-    .related-posts {
-        display: flex;
-        gap: 20px;
-        transition: transform 0.3s ease;
-    }
-
-    .country-flag {
-        width: 24px;
-        height: 18px;
-        margin-left: 4px;
-        border-radius: 2px;
-        vertical-align: middle;
-    }
-
-    .author-info {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    }
-</style>
-
-@* review section *@
-<style>
-
-    .review-section {
-        padding: 20px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        margin-top: 20px;
-    }
-
-    .rating-summary {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .rating-score {
-        font-size: 36px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .star-rating {
-        color: #ffd700;
-        font-size: 24px;
-        margin: 8px 0;
-    }
-
-    .review-count {
-        color: #666;
-        font-size: 14px;
-    }
-
-    .write-review-btn {
-        width: 100%;
-        padding: 12px;
-        background: #2DB400;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 16px 0;
-        cursor: pointer;
-    }
-
-    .review-item {
-        border-top: 1px solid #eee;
-        padding: 20px 0;
-    }
-
-    .review-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    .reviewer-info {
-        display: flex;
-        gap: 12px;
-    }
-
-    .reviewer-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-    }
-
-    .reviewer-details {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .reviewer-name {
-        font-weight: bold;
-        margin-bottom: 4px;
-    }
-
-    .review-meta {
-        font-size: 12px;
-        color: #666;
-    }
-
-    .more-options {
-        background: none;
-        border: none;
-        font-size: 20px;
-        color: #666;
-        cursor: pointer;
-    }
-
-    .review-rating {
-        margin: 12px 0;
-    }
-
-    .stars {
-        color: #ffd700;
-        margin-right: 8px;
-    }
-
-    .review-date {
-        color: #666;
-        font-size: 14px;
-    }
-
-    .review-content {
-        margin: 12px 0;
-        line-height: 1.5;
-    }
-
-    .review-service {
-        background: #f8f8f8;
-        padding: 12px;
-        border-radius: 4px;
-        margin: 12px 0;
-    }
-
-        .review-service span {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-    .review-more {
-        color: #2DB400;
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-</style>

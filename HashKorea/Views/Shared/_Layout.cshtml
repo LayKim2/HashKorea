@@ -7,11 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hash Korea</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/fontawesome.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Loplait.styles.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo1iPI7wSqNQkL9f2QsLpmZ_We5n7xs1g&language=en&callback=initMap" async defer></script>
 
