@@ -31,4 +31,8 @@
     <ProjectReference Include="..\HashKorea.ServiceDefaults\HashKorea.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
 </Project>
