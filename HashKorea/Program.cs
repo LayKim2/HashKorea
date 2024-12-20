@@ -27,18 +27,18 @@ builder.Services.AddDbContext<DataContext>(options =>
     // options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
     // 2. MYSQL(MariaDB)
-    //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-
-    var connectionString = string.Format(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        Environment.GetEnvironmentVariable("AWS_SERVER"),
-        Environment.GetEnvironmentVariable("AWS_DATABASE"),
-        Environment.GetEnvironmentVariable("AWS_USER"),
-        Environment.GetEnvironmentVariable("AWS_PASSWORD")
-    );
-
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+
+    //var connectionString = string.Format(
+    //    builder.Configuration.GetConnectionString("DefaultConnection"),
+    //    Environment.GetEnvironmentVariable("AWS_SERVER"),
+    //    Environment.GetEnvironmentVariable("AWS_DATABASE"),
+    //    Environment.GetEnvironmentVariable("AWS_USER"),
+    //    Environment.GetEnvironmentVariable("AWS_PASSWORD")
+    //);
+
+    //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
 // JWT setting
@@ -69,6 +69,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddHttpClient(); // service에서 외부 api 호출(http)을 위해서(ex: kakao login)
 
 var app = builder.Build();
+
+DatabaseManagementService.MigrationInitialisation(app);
 
 app.MapDefaultEndpoints();
 

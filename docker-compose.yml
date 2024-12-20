@@ -1,3 +1,5 @@
+version: '3.4'
+
 services:
   hashkorea:
     image: ${DOCKER_REGISTRY-}hashkorea
@@ -11,7 +13,10 @@ services:
     environment:
       # - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=${AWS_SERVER};Port=3306;Database=${AWS_DATABASE};User=${AWS_USER};Password=${AWS_PASSWORD};
+      # MSSQL
+      # - ConnectionStrings__DefaultConnection=Server=hashkorea.database;Database=HashKorea;User Id=sa;Password=${SA_PASSWORD:-YourStrong@Passw0rd1};TrustServerCertificate=True;Encrypt=False;
     volumes:
+      # - ./init-scripts:/docker-entrypoint-initdb.d
       - ./uploads:/app/uploads
       - ~/.aws:/root/.aws:ro
     user: "${UID}:${GID}"
