@@ -119,7 +119,9 @@
 
     function logout() {
         // TO DO: to fix the expires date
-        document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=Strict;";
+        // TO DO: change this code if you change the url to HTTPS
+        // document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=Strict;";
+        document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax;";
         refreshTopMenu();
     }
 
