@@ -96,26 +96,28 @@
         $(loginModal).modal('hide');
     }
 
-    function openKakaoLogin() {
-        var width = 500;
-        var height = 600;
-        var left = (screen.width / 2) - (width / 2);
-        var top = (screen.height / 2) - (height / 2);
-        var kakaoLoginWindow = window.open('/api/auth/signin/kakao', 'KakaoLogin', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+        function openKakaoLogin() {
+            var width = 500;
+            var height = 600;
+            var left = (screen.width / 2) - (width / 2);
+            var top = (screen.height / 2) - (height / 2);
+            var kakaoLoginWindow = window.open('/api/auth/signin/kakao', 'KakaoLogin', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
 
-        // check all event when you close the popup
-            window.addEventListener('message', function(event) {
-            if (event.origin !== window.location.origin) return;
+            // check all event when you close the popup
+                window.addEventListener('message', function(event) {
+                if (event.origin !== window.location.origin) return;
 
-            if (event.data && event.data.token) {
+                if (event.data && event.data.token) {
 
-                // localStorage.setItem('authToken', event.data.token);
-                document.cookie = `auth_token=${event.data.token}; path=/; Secure`;
+                    document.cookie = `auth_token=${event.data.token}; path=/;`;
 
-                checkLoginStatus();
-            }
-        }, false);
-    }
+                    // TO DO: change this code if you change the url to HTTPS
+                    // document.cookie = `auth_token=${event.data.token}; path=/; Secure`;
+
+                    checkLoginStatus();
+                }
+            }, false);
+        }
 
     function checkLoginStatus() {
         fetch('/api/auth/check-login-status')
