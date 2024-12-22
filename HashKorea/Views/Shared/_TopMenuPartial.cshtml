@@ -3,12 +3,14 @@
         <div class="navbar-brand d-flex align-items-center">
             <img src="~/main-icon.png" alt="Hash Korea Logo" class="me-2" style="height: 40px; width: auto;">
             <a class="text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index"><span style="font-weight: bold; color: #88aca2;">Hash Korea</span></a>
+            
         </div>
         <div class="d-block d-sm-none">
             <div class="d-flex align-items-center">
-                <a class="btn-login" onclick="showLoginModal()">
-                    <span>Login</span>
-                </a>
+                @if (User.Identity.IsAuthenticated) {
+                    <span class="me-2">@User.Identity.Name</span>
+                }
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -19,6 +21,24 @@
             <ul class="navbar-nav flex-grow-1">
 
                 <div class="d-sm-none mobile-menu">
+
+                <li class="nav-item">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                        <div class="nav-link" onclick="logout()">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </div>
+                        }
+                        else
+                        {
+                        <div class="nav-link" onclick="showLoginModal()">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <span>Login</span>
+                        </div>
+                        }
+                </li>
+
                     <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
@@ -64,10 +84,43 @@
                 </li>
             </ul>
         </div>
-        <div class="d-none d-sm-block">
-            <a class="btn-login" onclick="showLoginModal()">
-                <span>Login</span>
-            </a>
-        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="d-none d-sm-flex align-items-center user-info">
+                <span class="me-2">@User.Identity.Name</span>
+                <a class="btn-login" onclick="logout()">
+                    <span>Logout</span>
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="d-none d-sm-block">
+                <a class="btn-login" onclick="showLoginModal()">
+                    <span>Login</span>
+                </a>
+            </div>
+        }
+
     </div>
 </nav>
+
+<script>
+
+    function refreshTopMenu() {
+        fetch('/Home/GetTopMenu')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('header').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function logout() {
+        // TO DO: to fix the expires date
+        document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=Strict;";
+        refreshTopMenu();
+    }
+
+</script>
