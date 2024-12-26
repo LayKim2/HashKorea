@@ -43,4 +43,5 @@ public class User
     public virtual UserAuth UserAuth { get; set; } = new UserAuth();
     public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     public virtual ICollection<Term> TermsAgreements { get; set; } = new HashSet<Term>();
+    public virtual ICollection<UserPost> UserPosts { get; set; } = new HashSet<UserPost>();
 }

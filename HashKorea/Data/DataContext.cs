@@ -20,6 +20,7 @@ public class DataContext : DbContext
     public DbSet<UserAuth> UserAuth { get; set; }
     public DbSet<UserRole> UserRole { get; set; }
     public DbSet<Term> Terms { get; set; }
+    public DbSet<UserPost> UserPosts { get; set; }
     #endregion
 
 

@@ -172,6 +172,22 @@
             min-width: 120px;
         }
 
+
+        #editor {
+            min-height: 300px;
+            border: 2px dashed #ccc;
+            padding: 10px;
+        }
+
+            #editor.drag-over {
+                border-color: #007bff;
+                background-color: rgba(0, 123, 255, 0.1);
+            }
+
+            #editor img {
+                max-width: 100%;
+                height: auto;
+            }
     </style>
 }
 
@@ -265,7 +281,9 @@
         </div>
     </div>
 
-    <div id="editor" class="editor-content" contenteditable="true" data-placeholder="Enter your content here..."></div>
+    <div id="editor" class="editor-content" contenteditable="true" data-placeholder="Enter your content here...">
+        <p><br></p>
+    </div>
 
     <div class="editor-footer">
         <button class="submit-button">Submit</button>
@@ -298,6 +316,76 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         document.execCommand('styleWithCSS', false, true);
+    });
+
+    // 3. drag & drop image
+    const editor = document.getElementById('editor');
+
+    editor.addEventListener('dragover', (e) => {
+        e.preventDefault(); // 기본 동작 방지
+        editor.classList.add('drag-over'); // 드래그 오버 시 스타일 추가
+    });
+
+    editor.addEventListener('dragleave', () => {
+        editor.classList.remove('drag-over'); // 드래그 아웃 시 스타일 제거
+    });
+
+    editor.addEventListener('drop', (e) => {
+        e.preventDefault(); // 기본 동작 방지
+        editor.classList.remove('drag-over'); // 드래그 오버 스타일 제거
+        const files = e.dataTransfer.files; // 드래그된 파일 가져오기
+        handleFiles(files); // 파일 처리 함수 호출
+    });
+
+
+        function handleFiles(files) {
+        for (let file of files) {
+            if (file.type.startsWith('image/')) { // 이미지 파일인지 확인
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result; // 이미지 소스 설정
+                    insertImageAtCursor(img); // 커서 위치에 이미지 삽입
+                };
+                reader.readAsDataURL(file); // 파일을 Data URL로 읽기
+            }
+        }
+    }
+
+    function insertImageAtCursor(img) {
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        range.insertNode(img); // 커서 위치에 이미지 노드 삽입
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+
+    // save
+    const submitButton = document.querySelector('.submit-button');
+
+        
+    submitButton.addEventListener('click', async () => {
+      const content = editor.innerHTML;
+
+      const formData = new FormData();
+      formData.append('content', content);
+
+      try {
+        const response = await fetch('/api/user/content', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('Content saved successfully:', result);
+        } else {
+          console.error('Failed to save content');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     });
 
 </script>

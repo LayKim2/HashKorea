@@ -23,6 +23,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 // DBContext
 builder.Services.AddDbContext<DataContext>(options =>
