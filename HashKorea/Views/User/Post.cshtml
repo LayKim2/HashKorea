@@ -207,7 +207,7 @@
 
     <div class="editor-toolbar">
         <div class="toolbar-group">
-            <select class="toolbar-select" onchange="handleFontChange(this.value)">
+            <select class="toolbar-select font-select">
                 <option value="Arial">Arial</option>
                 <option value="Helvetica">Helvetica</option>
                 <option value="Times New Roman">Times New Roman</option>
@@ -215,8 +215,7 @@
                 <option value="Verdana">Verdana</option>
             </select>
 
-
-            <select class="toolbar-select" onchange="execCommand('fontSize', this.value)">
+            <select class="toolbar-select font-size-select">
                 <option value="3">Normal</option>
                 <option value="1">Small</option>
                 <option value="5">Large</option>
@@ -227,40 +226,28 @@
         <div class="toolbar-group">
             <button class="toolbar-btn color-btn">
                 <i class="fas fa-font"></i>
-                <input type="color" class="color-picker" onchange="applyTextColor(this.value)">
+                <input type="color" class="color-picker" />
             </button>
             <button class="toolbar-btn color-btn">
                 <i class="fas fa-highlighter"></i>
-                <input type="color" class="color-picker" onchange="document.execCommand('hiliteColor', false, this.value)">
+                <input type="color" class="color-picker" />
             </button>
         </div>
 
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="execCommand('bold')">
-                <i class="fas fa-bold"></i>
-            </button>
-            <button class="toolbar-btn" onclick="execCommand('italic')">
-                <i class="fas fa-italic"></i>
-            </button>
-            <button class="toolbar-btn" onclick="execCommand('underline')">
-                <i class="fas fa-underline"></i>
-            </button>
+            <button class="toolbar-btn" data-command="bold"><i class="fas fa-bold"></i></button>
+            <button class="toolbar-btn" data-command="italic"><i class="fas fa-italic"></i></button>
+            <button class="toolbar-btn" data-command="underline"><i class="fas fa-underline"></i></button>
         </div>
 
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="execCommand('justifyLeft')">
-                <i class="fas fa-align-left"></i>
-            </button>
-            <button class="toolbar-btn" onclick="execCommand('justifyCenter')">
-                <i class="fas fa-align-center"></i>
-            </button>
-            <button class="toolbar-btn" onclick="execCommand('justifyRight')">
-                <i class="fas fa-align-right"></i>
-            </button>
+            <button class="toolbar-btn" data-command="justifyLeft"><i class="fas fa-align-left"></i></button>
+            <button class="toolbar-btn" data-command="justifyCenter"><i class="fas fa-align-center"></i></button>
+            <button class="toolbar-btn" data-command="justifyRight"><i class="fas fa-align-right"></i></button>
         </div>
 
         <div class="toolbar-group">
-            <select class="toolbar-select" onchange="execCommand('formatBlock', this.value)">
+            <select class="toolbar-select format-select">
                 <option value="p">Normal Text</option>
                 <option value="h1">Heading 1</option>
                 <option value="h2">Heading 2</option>
@@ -269,15 +256,9 @@
         </div>
 
         <div class="toolbar-group">
-            <button class="toolbar-btn" onclick="execCommand('insertImage')">
-                <i class="fas fa-image"></i>
-            </button>
-            <button class="toolbar-btn" onclick="execCommand('insertUnorderedList')">
-                <i class="fas fa-list-ul"></i>
-            </button>
-            <button class="toolbar-btn" onclick="execCommand('insertOrderedList')">
-                <i class="fas fa-list-ol"></i>
-            </button>
+            <button class="toolbar-btn" data-command="insertImage"><i class="fas fa-image"></i></button>
+            <button class="toolbar-btn" data-command="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
+            <button class="toolbar-btn" data-command="insertOrderedList"><i class="fas fa-list-ol"></i></button>
         </div>
     </div>
 
@@ -291,101 +272,115 @@
 </div>
 
 <script>
-
-    document.addEventListener('DOMContentLoaded', function () {
+    // jQuery ready function
+    $(document).ready(function() {
+        const $editor = $('#editor');
         const defaultColor = 'black';
-        document.getElementById('editor').style.color = defaultColor;
+        $editor.css('color', defaultColor);
+
+        // Enable styleWithCSS
+        document.execCommand('styleWithCSS', false, true);
+
+        // Drag and drop functionality
+        $editor.on({
+            'dragover': function(e) {
+                e.preventDefault();
+                $(this).addClass('drag-over');
+            },
+            'dragleave': function() {
+                $(this).removeClass('drag-over');
+            },
+            'drop': function(e) {
+                e.preventDefault();
+                $(this).removeClass('drag-over');
+                handleFiles(e.originalEvent.dataTransfer.files);
+            }
+        });
+
+        // Font change event for font family
+        $('.font-select').on('change', function() {
+            execCommand('fontName', $(this).val());
+        });
+
+        // Font size change event
+        $('.font-size-select').on('change', function() {
+            execCommand('fontSize', $(this).val());
+        });
+
+        // Color picker functionality
+        $('.color-picker').on('change', function() {
+            applyTextColor($(this).val());
+        });
+
+        // Command execution for buttons
+        $('.toolbar-btn').on('click', function() {
+            const command = $(this).data('command');
+            execCommand(command);
+        });
+
+        // Submit button functionality
+        $('.submit-button').on('click', async function() {
+            const category = $('.category-select').val();
+            const title = $('.title-input').val();
+            const content = $editor.html();
+
+            const formData = new FormData();
+            formData.append('category', category);
+            formData.append('title', title);
+            formData.append('content', content);
+
+            try {
+                const response = await $.ajax({
+                    url: '/api/user/post',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false
+                });
+                console.log('Content saved successfully:', response);
+            } catch (error) {
+                console.error('Failed to save content:', error);
+            }
+        });
     });
 
-    // 1. for color
-    document.execCommand('styleWithCSS', true);
-
+    // Function to apply text color
     function applyTextColor(color) {
-        // apply text color only after input text now
         document.execCommand('foreColor', false, color);
     }
 
-    document.querySelector('.color-picker').addEventListener('change', function () {
-        applyTextColor(this.value);
-    });
-
-    // 2. font
-    function handleFontChange(fontFamily) {
-        document.execCommand('fontName', false, fontFamily);
+    // Function to execute commands
+    function execCommand(command, value = null) {
+        document.execCommand(command, false, value);
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        document.execCommand('styleWithCSS', false, true);
-    });
-
-    // 3. drag & drop image
-    const editor = document.getElementById('editor');
-
-    editor.addEventListener('dragover', (e) => {
-        e.preventDefault(); // 기본 동작 방지
-        editor.classList.add('drag-over'); // 드래그 오버 시 스타일 추가
-    });
-
-    editor.addEventListener('dragleave', () => {
-        editor.classList.remove('drag-over'); // 드래그 아웃 시 스타일 제거
-    });
-
-    editor.addEventListener('drop', (e) => {
-        e.preventDefault(); // 기본 동작 방지
-        editor.classList.remove('drag-over'); // 드래그 오버 스타일 제거
-        const files = e.dataTransfer.files; // 드래그된 파일 가져오기
-        handleFiles(files); // 파일 처리 함수 호출
-    });
-
-
-        function handleFiles(files) {
-        for (let file of files) {
-            if (file.type.startsWith('image/')) { // 이미지 파일인지 확인
+    // Function to handle file uploads
+    function handleFiles(files) {
+        $.each(files, function(i, file) {
+            if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = function(e) {
                     const img = document.createElement('img');
-                    img.src = e.target.result; // 이미지 소스 설정
-                    insertImageAtCursor(img); // 커서 위치에 이미지 삽입
+                    img.src = e.target.result;
+                    insertImageAtCursor(img);
                 };
-                reader.readAsDataURL(file); // 파일을 Data URL로 읽기
+                reader.readAsDataURL(file);
             }
-        }
+        });
     }
 
+    // Function to insert image at cursor position
     function insertImageAtCursor(img) {
         const selection = window.getSelection();
-        const range = selection.getRangeAt(0);
-        range.insertNode(img); // 커서 위치에 이미지 노드 삽입
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    }
-
-    // save
-    const submitButton = document.querySelector('.submit-button');
-
-        
-    submitButton.addEventListener('click', async () => {
-      const content = editor.innerHTML;
-
-      const formData = new FormData();
-      formData.append('content', content);
-
-      try {
-        const response = await fetch('/api/user/content', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          console.log('Content saved successfully:', result);
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            range.insertNode(img);
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
         } else {
-          console.error('Failed to save content');
+            $('#editor').append(img);
         }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    });
-
+    }
 </script>
+

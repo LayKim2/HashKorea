@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using HashKorea.Models;
 using HashKorea.Services;
 using System.Security.Claims;
+using HashKorea.DTOs.User;
 
 namespace HashKorea.Controllers;
 
@@ -28,13 +29,13 @@ public class UserController : Controller
         return View();
     }
 
-    [HttpPost("content")]
-    public async Task<IActionResult> SaveContent([FromForm] string content)
+    [HttpPost("post")]
+    public async Task<IActionResult> AddPost([FromForm] PostRequestDto model)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         var userId = int.Parse(userIdClaim.Value);
 
-        var response = await _userService.AddContent(userId, content);
+        var response = await _userService.AddPost(userId, model);
 
         if (!response.Success)
         {

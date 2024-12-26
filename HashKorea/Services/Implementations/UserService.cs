@@ -1,5 +1,6 @@
 ﻿using HashKorea.Common.Constants;
 using HashKorea.Data;
+using HashKorea.DTOs.User;
 using HashKorea.Models;
 using HashKorea.Responses;
 using System.Text.RegularExpressions;
@@ -19,13 +20,13 @@ public class UserService : IUserService
         _fileService = fileService;
     }
 
-    public async Task<ServiceResponse<int>> AddContent(int userId, string content)
+    public async Task<ServiceResponse<int>> AddPost(int userId, PostRequestDto model)
     {
         var response = new ServiceResponse<int>();
 
         try
         {
-            var convertedContentResponse = await UploadImage(content, userId);
+            var convertedContentResponse = await ConvertContent(model.Content, userId);
 
             if (!convertedContentResponse.Success)
             {
@@ -37,12 +38,19 @@ public class UserService : IUserService
                 };
             }
 
+            string mainImageUrl = string.Empty;
+            //if (model.MainImage != null)
+            //{
+            //    // 여기에 메인 이미지 업로드 로직을 구현하고 URL을 받아옵니다.
+            //    // 예: mainImageUrl = await UploadMainImage(postDto.MainImage, userId);
+            //}
+
             var userPost = new UserPost
             {
                 UserId = userId,
-                Title = string.Empty, 
-                Category = string.Empty,
-                MainImagePublicUrl = string.Empty,
+                Title = model.Title,
+                Category = model.Category,
+                MainImagePublicUrl = mainImageUrl,
                 Content = convertedContentResponse.Data,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now
@@ -58,14 +66,15 @@ public class UserService : IUserService
             response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
             response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
 
-            _logService.LogError("EXCEPTION: AddContent", ex.Message, $"user id: {userId}");
+            _logService.LogError("EXCEPTION: AddPost", ex.Message, $"user id: {userId}");
         }
 
         return response;
     }
 
 
-    private async Task<ServiceResponse<string>> UploadImage(string content, int userId)
+
+    private async Task<ServiceResponse<string>> ConvertContent(string content, int userId)
     {
         var response = new ServiceResponse<string>();
 
