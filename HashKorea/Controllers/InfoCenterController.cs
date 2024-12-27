@@ -6,6 +6,8 @@ using HashKorea.Common.Constants;
 
 namespace HashKorea.Controllers;
 
+[Route("api/infocenter")]
+[ApiController]
 public class InfoCenterController : Controller
 {
     private readonly ILogger<InfoCenterController> _logger;
@@ -22,16 +24,19 @@ public class InfoCenterController : Controller
         return View();
     }
 
+    [HttpGet("tourmap")]
     public IActionResult TourMap()
     {
         return View();
     }
 
+    [HttpGet("koreais")]
     public IActionResult KoreaIs()
     {
         return View();
     }
 
+    [HttpGet("promotion")]
     public async Task<IActionResult> Promotions()
     {
         var response = await _commonService.GetPosts(POST_TYPE.PROMOTION);
@@ -42,6 +47,19 @@ public class InfoCenterController : Controller
         }
 
         return View(response.Data);
+    }
+
+    [HttpGet("promotion/post/detail")]
+    public async Task<IActionResult> GetPostDetail(int id)
+    {
+        var response = await _commonService.GetPostDetail(id);
+
+        if (!response.Success)
+        {
+            return NotFound();
+        }
+
+        return View("PostDetail", response.Data);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

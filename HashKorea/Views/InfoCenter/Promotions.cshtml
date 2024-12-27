@@ -231,7 +231,7 @@
         <h2 class="result-count">Total Results: <span class="highlight">@Model.Count()</span></h2>
         @if (User.Identity.IsAuthenticated)
         {
-            <form asp-area="" asp-controller="User" asp-action="Post" method="get">
+            <form asp-area="" asp-controller="User" asp-action="Detail" method="get">
                 <button type="submit" class="post-button">Post</button>
             </form>
         }
@@ -241,13 +241,15 @@
         {
             foreach (var post in Model)
             {
-                <div class="image-item">
-                    <div class="image-wrapper">
-                        @* <img src="@post.PublicUrl" alt="@post.Title"> *@
-                        <img src="https://picsum.photos/800/600" />
-                    </div>
-                    <div class="category">@post.Category</div>
-                    <h3 class="image-title">@post.Title</h3>
+                <div class="image-item" data-id="@post.Id">
+                    <a href="/api/infocenter/promotion/post/detail?id=@post.Id" style="text-decoration: none;">
+                        <div class="image-wrapper">
+                            @* <img src="@post.PublicUrl" alt="@post.Title"> *@
+                            <img src="https://picsum.photos/800/600" />
+                        </div>
+                        <div class="category">@post.Category</div>
+                        <h3 class="image-title">@post.Title</h3>
+                    </a>
                 </div>
             }
         }
@@ -260,3 +262,11 @@
 
 
 
+<script>
+    $(document).ready(function() {
+        $('.image-item').on('click', function() {
+            var postId = $(this).data('id');
+            window.location.href = '@Url.Action("Detail", "User")' + '?id=' + postId;
+        });
+    });
+</script>

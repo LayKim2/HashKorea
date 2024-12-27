@@ -1,11 +1,7 @@
-﻿using HashKorea.Common.Constants;
-using HashKorea.Data;
+﻿using HashKorea.Data;
 using HashKorea.DTOs.Common;
-using HashKorea.DTOs.User;
-using HashKorea.Models;
 using HashKorea.Responses;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 
 namespace HashKorea.Services;
 
@@ -48,5 +44,45 @@ public class CommonService : ICommonService
 
         return response;
     }
+
+    public async Task<ServiceResponse<GetPostDetailResponsetDto>> GetPostDetail(int postId)
+    {
+        var response = new ServiceResponse<GetPostDetailResponsetDto>();
+
+        try
+        {
+            var post = await _context.UserPosts
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (post == null)
+            {
+                response.Success = false;
+                response.Message = "Post not found";
+                return response;
+            }
+
+            var postDto = new GetPostDetailResponsetDto
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Content = post.Content,
+                CreatedDate = post.CreatedDate,
+                UserName = post.User.Name,
+                UserCountry = post.User.Country
+            };
+
+            response.Data = postDto;
+        }
+        catch (Exception ex)
+        {
+            response.Success = false;
+            response.Message = $"Failed to retrieve post with ID: {postId}";
+            _logService.LogError("GetPostDetail", ex.Message, ex.StackTrace ?? string.Empty);
+        }
+
+        return response;
+    }
+
 
 }
