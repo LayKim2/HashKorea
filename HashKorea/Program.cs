@@ -25,6 +25,7 @@ builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<ICommonService, CommonService>();
 
 // DBContext
 builder.Services.AddDbContext<DataContext>(options =>

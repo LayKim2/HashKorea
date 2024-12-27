@@ -1,6 +1,9 @@
-﻿@{
+﻿@model List<HashKorea.DTOs.Common.GetPostsResponseDto>
+
+@{
     ViewData["Title"] = "Promotions";
 }
+
 
 @section Styles {
     @* 1. search-container *@
@@ -225,91 +228,33 @@
 
 <div class="image-list-container">
     <div class="result-header">
-        <h2 class="result-count">Total Results: <span class="highlight">10</span></h2>
-        <form asp-area="" asp-controller="User" asp-action="Post">
-            <button type="submit" class="post-button">Post</button>
-        </form>
+        <h2 class="result-count">Total Results: <span class="highlight">@Model.Count()</span></h2>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form asp-area="" asp-controller="User" asp-action="Post" method="get">
+                <button type="submit" class="post-button">Post</button>
+            </form>
+        }
     </div>
     <div class="image-grid">
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Random Image">
-            </div>
-            <div class="category">Travel</div>
-            <h3 class="image-title">A Historical Journey Through Gyeongbokgung Palace</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Digital Art">
-            </div>
-            <div class="category">Art</div>
-            <h3 class="image-title">Digital Art Exhibition at DDP</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Namsan Tower">
-            </div>
-            <div class="category">Landmark</div>
-            <h3 class="image-title">N Seoul Tower: The Heart of the City</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Hanok Village">
-            </div>
-            <div class="category">Heritage</div>
-            <h3 class="image-title">Exploring Seoul's Traditional Hanok Villages</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Street Food">
-            </div>
-            <div class="category">Food</div>
-            <h3 class="image-title">Street Food Adventures in Myeongdong</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Nature">
-            </div>
-            <div class="category">Nature</div>
-            <h3 class="image-title">Seoul's Hidden Gardens and Parks</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Seoul City">
-            </div>
-            <div class="category">Urban</div>
-            <h3 class="image-title">Modern Seoul: A City That Never Sleeps</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Korean Food">
-            </div>
-            <div class="category">Culture</div>
-            <h3 class="image-title">Traditional Korean Cuisine in Modern Times</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Temple">
-            </div>
-            <div class="category">History</div>
-            <h3 class="image-title">Ancient Temples of Seoul</h3>
-        </div>
-
-        <div class="image-item">
-            <div class="image-wrapper">
-                <img src="https://picsum.photos/800/600" alt="Festival">
-            </div>
-            <div class="category">Events</div>
-            <h3 class="image-title">Seoul Lantern Festival 2024</h3>
-        </div>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var post in Model)
+            {
+                <div class="image-item">
+                    <div class="image-wrapper">
+                        @* <img src="@post.PublicUrl" alt="@post.Title"> *@
+                        <img src="https://picsum.photos/800/600" />
+                    </div>
+                    <div class="category">@post.Category</div>
+                    <h3 class="image-title">@post.Title</h3>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No promotions available.</p>
+        }
     </div>
 </div>
 

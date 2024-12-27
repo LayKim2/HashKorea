@@ -12,6 +12,10 @@ public class UserPost
 
     [Required]
     public int UserId { get; set; }
+
+    [Required]
+    public string Type { get; set; } = string.Empty;
+    [Required]
     public string Category { get; set; } = string.Empty;
     public string MainImagePublicUrl { get; set; } = string.Empty;
     [Required]
