@@ -24,9 +24,11 @@ public class UserService : IUserService
     {
         var response = new ServiceResponse<int>();
 
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
         try
         {
-            var convertedContentResponse = await ConvertContent(model.Content, userId);
+            var convertedContentResponse = await ConvertContent(model.Content, userId, model.ImageFiles);
 
             if (!convertedContentResponse.Success)
             {
@@ -38,20 +40,14 @@ public class UserService : IUserService
                 };
             }
 
-            string mainImageUrl = string.Empty;
-            //if (model.MainImage != null)
-            //{
-            //    // 여기에 메인 이미지 업로드 로직을 구현하고 URL을 받아옵니다.
-            //    // 예: mainImageUrl = await UploadMainImage(postDto.MainImage, userId);
-            //}
+            var (content, userPostImages) = convertedContentResponse.Data;
 
             var userPost = new UserPost
             {
                 UserId = userId,
                 Title = model.Title,
                 Category = model.Category,
-                MainImagePublicUrl = mainImageUrl,
-                Content = convertedContentResponse.Data,
+                Content = content,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now
             };
@@ -59,13 +55,25 @@ public class UserService : IUserService
             _context.UserPosts.Add(userPost);
             await _context.SaveChangesAsync();
 
+            foreach (var image in userPostImages)
+            {
+                image.PostId = userPost.Id;
+                _context.UserPostImages.Add(image);
+            }
+
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            response.Success = true;
+            response.Data = userPost.Id;
         }
         catch (Exception ex)
         {
+            await transaction.RollbackAsync();
             response.Success = false;
             response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
             response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
-
             _logService.LogError("EXCEPTION: AddPost", ex.Message, $"user id: {userId}");
         }
 
@@ -73,69 +81,67 @@ public class UserService : IUserService
     }
 
 
-
-    private async Task<ServiceResponse<string>> ConvertContent(string content, int userId)
+    private async Task<ServiceResponse<(string Content, List<UserPostImage> Images)>> ConvertContent(string content, int userId, List<IFormFile> imageFiles)
     {
-        var response = new ServiceResponse<string>();
+        var response = new ServiceResponse<(string Content, List<UserPostImage> Images)>();
+        var userPostImages = new List<UserPostImage>();
 
         try
         {
-            var regex = new Regex(@"<img[^>]*src=""data:image/(?<type>\w+);base64,(?<data>[^""]*)""\s*[^>]*>");
+            var regex = new Regex(@"<img[^>]*src=""{{image_(\d+)}}""[^>]*>");
             var matches = regex.Matches(content);
 
             var folderPath = $"content/{userId}";
 
-            foreach (Match match in matches)
+            for (int i = 0; i < matches.Count; i++)
             {
-                var base64Data = match.Groups["data"].Value;
-                var imageType = match.Groups["type"].Value;
-                var imageBytes = Convert.FromBase64String(base64Data);
+                var match = matches[i];
+                var imageIndex = int.Parse(match.Groups[1].Value);
 
-                var fileName = $"{Guid.NewGuid()}.{imageType}";
-                var contentType = $"image/{imageType}";
-
-                using (var ms = new MemoryStream(imageBytes))
+                if (imageIndex >= imageFiles.Count)
                 {
-                    var formFile = new FormFile(ms, 0, imageBytes.Length, "image", fileName)
+                    continue;
+                }
+
+                var file = imageFiles[imageIndex];
+                var uploadResult = await _fileService.UploadFile(file, folderPath);
+
+                if (uploadResult.Success)
+                {
+                    content = content.Replace(match.Value, $"<img src=\"{uploadResult.Data.CloudFrontUrl}\" />");
+
+                    userPostImages.Add(new UserPostImage
                     {
-                        Headers = new HeaderDictionary(),
-                        ContentType = contentType
-                    };
-
-                    var uploadResult = await _fileService.UploadFile(formFile, folderPath);
-
-                    if (uploadResult.Success)
-                    {
-                        content = content.Replace(match.Value, $"<img src=\"{uploadResult.Data.CloudFrontUrl}\" />");
-                    }
-                    else
-                    {
-                        response.Success = false;
-                        response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
-                        response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
-
-                        _logService.LogError("Image Upload", uploadResult.Message, $"User ID: {userId}, Image Type: {imageType}");
-
-                        return response;
-                    }
+                        UserId = userId,
+                        StoragePath = uploadResult.Data.S3Path,
+                        PublicUrl = uploadResult.Data.CloudFrontUrl,
+                        FileName = file.FileName,
+                        FileType = file.ContentType,
+                        FileSize = file.Length
+                    });
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
+                    response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
+                    _logService.LogError("ConvertContent", uploadResult.Message, $"User ID: {userId}, File Name: {file.FileName}");
+                    return response;
                 }
             }
 
             response.Success = true;
-            response.Data = content;
+            response.Data = (content, userPostImages);
         }
         catch (Exception ex)
         {
             response.Success = false;
             response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
             response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
-
-            _logService.LogError("EXCEPTION: ProcessBase64Images", ex.Message, $"user id: {userId}");
+            _logService.LogError("EXCEPTION: ConvertContent", ex.Message, $"user id: {userId}");
         }
 
         return response;
     }
-
-
 
 }

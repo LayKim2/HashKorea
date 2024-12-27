@@ -4,9 +4,11 @@ using HashKorea.Models;
 using HashKorea.Services;
 using System.Security.Claims;
 using HashKorea.DTOs.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HashKorea.Controllers;
 
+[Authorize]
 [Route("api/user")]
 [ApiController]
 public class UserController : Controller
@@ -26,6 +28,7 @@ public class UserController : Controller
     [HttpGet("post")]
     public IActionResult Post()
     {
+        ViewBag.ReturnUrl = Request.Headers["Referer"].ToString();
         return View();
     }
 

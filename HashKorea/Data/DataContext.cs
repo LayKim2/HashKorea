@@ -21,6 +21,7 @@ public class DataContext : DbContext
     public DbSet<UserRole> UserRole { get; set; }
     public DbSet<Term> Terms { get; set; }
     public DbSet<UserPost> UserPosts { get; set; }
+    public DbSet<UserPostImage> UserPostImages { get; set; }
     #endregion
 
 

@@ -191,6 +191,8 @@
     </style>
 }
 
+<input type="hidden" id="returnUrl" value="@ViewBag.ReturnUrl" />
+
 <div class="modern-editor-container">
     <div class="editor-header">
         <div class="header-group">
@@ -267,7 +269,7 @@
     </div>
 
     <div class="editor-footer">
-        <button class="submit-button">Submit</button>
+        <button id="btnPost" class="submit-button">Submit</button>
     </div>
 </div>
 
@@ -318,29 +320,93 @@
             execCommand(command);
         });
 
-        // Submit button functionality
-        $('.submit-button').on('click', async function() {
+        function validateForm() {
+            let isValid = true;
             const category = $('.category-select').val();
-            const title = $('.title-input').val();
-            const content = $editor.html();
+            const title = $('.title-input').val().trim();
+            const content = $('#editor').text().trim();
 
-            const formData = new FormData();
-            formData.append('category', category);
-            formData.append('title', title);
-            formData.append('content', content);
-
-            try {
-                const response = await $.ajax({
-                    url: '/api/user/post',
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false
-                });
-                console.log('Content saved successfully:', response);
-            } catch (error) {
-                console.error('Failed to save content:', error);
+            if (!category) {
+                $('.category-select').css('border-color', 'red');
+                isValid = false;
+            } else {
+                $('.category-select').css('border-color', '');
             }
+
+            if (!title) {
+                $('.title-input').css('border-color', 'red');
+                isValid = false;
+            } else {
+                $('.title-input').css('border-color', '');
+            }
+
+            if (!content) {
+                $('#editor').css('border-color', 'red');
+                isValid = false;
+            } else {
+                $('#editor').css('border-color', '');
+            }
+
+            return isValid;
+        }
+
+        // Submit button functionality
+        $('#btnPost').on('click', async function(e) {
+
+            e.preventDefault();
+
+            if (validateForm()) {
+                const category = $('.category-select').val();
+                const title = $('.title-input').val();
+                const content = $editor.html();
+
+                const formData = new FormData();
+                formData.append('category', category);
+                formData.append('title', title);
+                formData.append('content', content);
+
+                const images = $editor.find('img');
+                const imagePromises = [];
+
+                images.each(function(index) {
+                    const img = $(this);
+                    const src = img.attr('src');
+                    if (src.startsWith('blob:')) {
+                        imagePromises.push(fetch(src)
+                            .then(r => r.blob())
+                            .then(blob => {
+                                const file = new File([blob], `image_${index}.png`, { type: 'image/png' });
+                                formData.append('imageFiles', file);
+                                img.attr('src', `{{image_${index}}}`);
+                            })
+                        );
+                    }
+                });
+
+                await Promise.all(imagePromises);
+
+                formData.set('content', $editor.html());
+
+                try {
+                    const response = await $.ajax({
+                        url: '/api/user/post',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    });
+                    console.log('Content saved successfully:', response);
+
+                    blobUrls.forEach(URL.revokeObjectURL);
+                    blobUrls = [];
+                    
+                    const returnUrl = $('#returnUrl').val() || '/';
+                    window.location.href = returnUrl;
+                } catch (error) {
+                    console.error('Failed to save content:', error);
+                }
+            }
+
         });
     });
 
@@ -355,16 +421,23 @@
     }
 
     // Function to handle file uploads
+    let blobUrls = [];
+
     function handleFiles(files) {
         $.each(files, function(i, file) {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function(event) {
+                    const blob = new Blob([event.target.result], { type: file.type });
+                    const url = URL.createObjectURL(blob);
+
+                    blobUrls.push(url);
+
                     const img = document.createElement('img');
-                    img.src = e.target.result;
+                    img.src = url;
                     insertImageAtCursor(img);
                 };
-                reader.readAsDataURL(file);
+                reader.readAsArrayBuffer(file);
             }
         });
     }

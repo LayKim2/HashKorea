@@ -25,4 +25,6 @@ public class UserPost
 
     [ForeignKey("UserId")]
     public virtual User User { get; set; }
+
+    public virtual ICollection<UserPostImage> UserPostImage { get; set; } = new HashSet<UserPostImage>();
 }
