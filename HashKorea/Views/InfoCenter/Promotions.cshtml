@@ -231,7 +231,7 @@
         <h2 class="result-count">Total Results: <span class="highlight">@Model.Count()</span></h2>
         @if (User.Identity.IsAuthenticated)
         {
-            <form asp-area="" asp-controller="User" asp-action="Detail" method="get">
+            <form asp-area="" asp-controller="User" asp-action="Post" method="get">
                 <button type="submit" class="post-button">Post</button>
             </form>
         }
