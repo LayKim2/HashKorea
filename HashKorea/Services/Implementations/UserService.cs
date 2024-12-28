@@ -109,7 +109,8 @@ public class UserService : IUserService
 
                 if (uploadResult.Success)
                 {
-                    content = content.Replace(match.Value, $"<img src=\"{uploadResult.Data.CloudFrontUrl}\" />");
+                    //content = content.Replace(match.Value, $"<img src=\"{uploadResult.Data.CloudFrontUrl}\" />");
+                    content = content.Replace(match.Value, $"<img src=\"{uploadResult.Data.S3Path}\" />");
 
                     userPostImages.Add(new UserPostImage
                     {

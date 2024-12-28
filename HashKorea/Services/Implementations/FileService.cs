@@ -75,7 +75,8 @@ public class FileService : IFileService
                 await fileTransferUtility.UploadAsync(uploadRequest);
             }
 
-            var s3Path = $"s3://{_bucketName}/{s3Key}";
+            //var s3Path = $"s3://{_bucketName}/{s3Key}";
+            var s3Path = $"https://{_bucketName}.s3.amazonaws.com/{s3Key}";
             var cloudFrontUrl = $"{_cloudFrontDomain}/{s3Key}";
 
             response.Data = (s3Path, cloudFrontUrl);
