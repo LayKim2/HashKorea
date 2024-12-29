@@ -46,7 +46,7 @@ public class UserService : IUserService
             {
                 UserId = userId,
                 Title = model.Title,
-                Type = POST_TYPE.PROMOTION,
+                Type = model.Type,
                 Category = model.Category,
                 CategoryCD = model.CategoryCD,
                 Content = content,

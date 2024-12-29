@@ -1,16 +1,20 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using HashKorea.Models;
+using HashKorea.Common.Constants;
+using HashKorea.Services;
 
 namespace HashKorea.Controllers;
 
 public class CommunityController : Controller
 {
     private readonly ILogger<CommunityController> _logger;
+    private readonly ICommonService _commonService;
 
-    public CommunityController(ILogger<CommunityController> logger)
+    public CommunityController(ILogger<CommunityController> logger, ICommonService commonService)
     {
         _logger = logger;
+        _commonService = commonService;
     }
 
     public IActionResult Index()
@@ -18,19 +22,41 @@ public class CommunityController : Controller
         return View();
     }
 
-    public IActionResult Notice()
+
+    public async Task<IActionResult> Notice()
     {
-        return View();
+        var response = await _commonService.GetPosts(POST_TYPE.NOTICE);
+
+        if (!response.Success)
+        {
+            return StatusCode(500, response);
+        }
+
+        return View(response.Data);
     }
 
-    public IActionResult FreeBoard()
+    public async Task<IActionResult> FreeBoard()
     {
-        return View();
+        var response = await _commonService.GetPosts(POST_TYPE.FREEBOARD);
+
+        if (!response.Success)
+        {
+            return StatusCode(500, response);
+        }
+
+        return View(response.Data);
     }
 
-    public IActionResult QnA()
+    public async Task<IActionResult> QnA()
     {
-        return View();
+        var response = await _commonService.GetPosts(POST_TYPE.QNA);
+
+        if (!response.Success)
+        {
+            return StatusCode(500, response);
+        }
+
+        return View(response.Data);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

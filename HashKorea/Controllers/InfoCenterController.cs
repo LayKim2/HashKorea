@@ -31,9 +31,16 @@ public class InfoCenterController : Controller
     }
 
     [HttpGet("koreais")]
-    public IActionResult KoreaIs()
+    public async Task<IActionResult> KoreaIs()
     {
-        return View();
+        var response = await _commonService.GetPosts(POST_TYPE.KOREAIS);
+
+        if (!response.Success)
+        {
+            return StatusCode(500, response);
+        }
+
+        return View(response.Data);
     }
 
     [HttpGet("promotion")]

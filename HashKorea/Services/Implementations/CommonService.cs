@@ -15,6 +15,7 @@ public class CommonService : ICommonService
         _context = context;
         _logService = logService;
     }
+
     public async Task<ServiceResponse<List<GetPostsResponseDto>>> GetPosts(string type)
     {
         var response = new ServiceResponse<List<GetPostsResponseDto>>();
@@ -22,15 +23,18 @@ public class CommonService : ICommonService
         try
         {
             var posts = await _context.UserPosts
-                                .Where(p => p.Type == type)
-                                .Select(p => new GetPostsResponseDto
-                                {
-                                    Id = p.Id,
-                                    Type = p.Type,
-                                    Title = p.Title,
-                                    Category = p.Category
-                                })
-                                .ToListAsync();
+                .Where(p => p.Type == type)
+                .Select(p => new GetPostsResponseDto
+                {
+                    Id = p.Id,
+                    Type = p.Type,
+                    Title = p.Title,
+                    Category = p.Category,
+                    Content = p.Content,
+                    UserName = p.User.Name,
+                    CreatedDate = p.CreatedDate,
+                })
+                .ToListAsync();
 
             response.Data = posts;
             response.Success = true;

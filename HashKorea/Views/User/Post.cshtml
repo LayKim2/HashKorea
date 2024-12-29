@@ -183,6 +183,7 @@
                 const content = $('#editor').html().trim();
 
                 const formData = new FormData();
+                formData.append('type', $('#hdntype').val());
                 formData.append('category', category);
                 formData.append('categoryCD', categoryCD);
                 formData.append('title', title);
