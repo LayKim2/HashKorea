@@ -33,6 +33,17 @@ public class SharedService : ISharedService
                 })
                 .ToListAsync();
 
+            if (commonCodes.Count == 0)
+            {
+                commonCodes.Add(new GetCommonCodeResponseDto()
+                {
+                    Id = 0,
+                    Code = "00",
+                    Name = "Default",
+                    Type = type
+                });
+            }
+
             response.Data = commonCodes;
             response.Success = true;
         }
