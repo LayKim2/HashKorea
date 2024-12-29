@@ -49,7 +49,7 @@ public class CommonService : ICommonService
         return response;
     }
 
-    public async Task<ServiceResponse<GetPostDetailResponsetDto>> GetPostDetail(int postId)
+    public async Task<ServiceResponse<GetPostDetailResponsetDto>> GetPostDetail(int userId, int postId)
     {
         var response = new ServiceResponse<GetPostDetailResponsetDto>();
 
@@ -73,7 +73,8 @@ public class CommonService : ICommonService
                 Content = post.Content,
                 CreatedDate = post.CreatedDate,
                 UserName = post.User.Name,
-                UserCountry = post.User.Country
+                UserCountry = post.User.Country,
+                IsOwner = (userId != 0 && userId == post.UserId)
             };
 
             response.Data = postDto;

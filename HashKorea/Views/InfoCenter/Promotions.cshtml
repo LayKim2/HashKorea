@@ -95,12 +95,3 @@
 </div>
 
 
-
-<script>
-    $(document).ready(function() {
-        $('.image-item').on('click', function() {
-            var postId = $(this).data('id');
-            window.location.href = '@Url.Action("Detail", "User")' + '?id=' + postId;
-        });
-    });
-</script>

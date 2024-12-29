@@ -10,4 +10,5 @@ public class GetPostDetailResponsetDto
     public DateTime CreatedDate { get; set; }
     public string UserName { get; set; } = string.Empty;
     public string UserCountry { get; set; } = string.Empty;
+    public bool IsOwner { get; set; } = false;
 }

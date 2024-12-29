@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using HashKorea.Models;
 using HashKorea.Services;
 using HashKorea.Common.Constants;
+using System.Security.Claims;
 
 namespace HashKorea.Controllers;
 
@@ -57,9 +58,36 @@ public class InfoCenterController : Controller
     }
 
     [HttpGet("promotion/post/detail")]
-    public async Task<IActionResult> GetPostDetail(int id)
+    public async Task<IActionResult> GetPromotionPostDetail(int id)
     {
-        var response = await _commonService.GetPostDetail(id);
+        int userId = 0;
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim != null)
+        {
+            userId = int.Parse(userIdClaim.Value);
+        }
+
+        var response = await _commonService.GetPostDetail(userId, id);
+
+        if (!response.Success)
+        {
+            return NotFound();
+        }
+
+        return View("PostDetail", response.Data);
+    }
+
+    [HttpGet("koreais/post/detail")]
+    public async Task<IActionResult> GetKoreaIsPostDetail(int id)
+    {
+        int userId = 0;
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim != null)
+        {
+            userId = int.Parse(userIdClaim.Value);
+        }
+
+        var response = await _commonService.GetPostDetail(userId, id);
 
         if (!response.Success)
         {

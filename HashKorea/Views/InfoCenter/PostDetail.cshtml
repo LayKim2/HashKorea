@@ -1,5 +1,8 @@
 ﻿@model HashKorea.DTOs.Common.GetPostDetailResponsetDto
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/InfoCenter/PostDetail.css" />
+}
 
 <div class="full-page">
     <div class="content">
@@ -12,5 +15,39 @@
         <div class="post-body">
             @Html.Raw(Model.Content)
         </div>
+
+        @if (Model.IsOwner)
+        {
+            <div class="post-actions">
+                <button class="post-button" onclick="location.href='/post/edit/@Model.Id'">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </button>
+                <button class="post-button" onclick="confirmDelete(@Model.Id)">
+                    <i class="bi bi-trash"></i> Delete
+                </button>
+            </div>
+        }
     </div>
 </div>
+
+<script>
+    function confirmDelete(postId) {
+        if (confirm('Are you sure you want to delete this post?')) {
+            $.ajax({
+                url: `/api/user/post?postId=${postId}`,
+                type: 'DELETE',
+                success: function(response) {
+                    if (response.success) {
+                        const currentUrl = window.location.href;
+                        const baseUrl = currentUrl.split('/post/detail')[0];
+                        window.location.href = baseUrl;
+                    }
+                },
+                error: function(error) {
+                    console.error('Failed to delete post:', error);
+                }
+            });
+        }
+    }
+
+</script>
