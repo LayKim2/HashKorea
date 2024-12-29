@@ -37,6 +37,8 @@ public static class MessageCode
         INVALID_FILE_TYPE = 4001,
         INVALID_DEMOSTAR = 4002,
         FAILED_FILE_UPLOAD = 4003,
+        UNAUTHORIZED = 4004,
+        NOT_FOUND_POST = 4004,
         UNKNOWN_ERROR = 9999
     }
 
@@ -62,6 +64,8 @@ public static class MessageCode
         { Custom.INVALID_FILE_TYPE, "허용되지 않는 파일 형식입니다." },
         { Custom.INVALID_DEMOSTAR, "존재하지 않는 데이터입니다." },
         { Custom.FAILED_FILE_UPLOAD, "파일 업로드에 실패했습니다." },
+        { Custom.NOT_FOUND_POST, "Post를 찾을 수 없습니다." },
+        { Custom.UNAUTHORIZED, "권한이 없습니다." },
         { Custom.UNKNOWN_ERROR, "알수 없는 에러 입니다. 관리자에게 문의하세요." }
     };
 }

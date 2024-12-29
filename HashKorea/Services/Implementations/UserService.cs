@@ -3,6 +3,7 @@ using HashKorea.Data;
 using HashKorea.DTOs.User;
 using HashKorea.Models;
 using HashKorea.Responses;
+using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace HashKorea.Services;
@@ -20,6 +21,12 @@ public class UserService : IUserService
         _fileService = fileService;
     }
 
+    private async Task<bool> IsExistUser(int userId)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        return user != null;
+    }
+
     public async Task<ServiceResponse<int>> AddPost(int userId, PostRequestDto model)
     {
         var response = new ServiceResponse<int>();
@@ -28,6 +35,17 @@ public class UserService : IUserService
 
         try
         {
+            bool isExistUser = await IsExistUser(userId);
+
+            if (isExistUser == false)
+            {
+                response.Success = false;
+                response.Code = MessageCode.Custom.NOT_FOUND_USER.ToString();
+                response.Message = MessageCode.CustomMessages[MessageCode.Custom.NOT_FOUND_USER];
+
+                return response;
+            }
+
             var convertedContentResponse = await ConvertContent(model.Content, userId, model.ImageFiles);
 
             if (!convertedContentResponse.Success)
@@ -77,6 +95,207 @@ public class UserService : IUserService
             response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
             response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
             _logService.LogError("EXCEPTION: AddPost", ex.Message, $"user id: {userId}");
+        }
+
+        return response;
+    }
+
+    public async Task<ServiceResponse<int>> UpdatePost(int userId, PostRequestDto model)
+    {
+        var response = new ServiceResponse<int>();
+
+        var postId = model.PostId ?? 0;
+        bool isExistUser = await IsExistUser(userId);
+
+        if (isExistUser == false)
+        {
+            response.Success = false;
+            response.Code = MessageCode.Custom.NOT_FOUND_USER.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.NOT_FOUND_USER];
+            return response;
+        }
+
+        bool isOwner = await CheckOwner(userId, postId);
+
+        if (isOwner == false)
+        {
+            response.Success = false;
+            response.Code = MessageCode.Custom.UNAUTHORIZED.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.NOT_FOUND_USER];
+            return response;
+        }
+
+        var existingPost = await _context.UserPosts
+            .FirstOrDefaultAsync(p => p.Id == postId && p.UserId == userId);
+
+        if (existingPost == null)
+        {
+            response.Success = false;
+            response.Code = MessageCode.Custom.NOT_FOUND_POST.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.NOT_FOUND_POST];
+            return response;
+        }
+
+        var existingImageUrls = await _context.UserPostImages
+                                        .Where(i => i.PostId == postId)
+                                        .Select(i => i.StoragePath)
+                                        .ToListAsync();
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var convertedContentResponse = await ConvertContent(model.Content, userId, model.ImageFiles);
+
+            if (!convertedContentResponse.Success)
+            {
+                return new ServiceResponse<int>
+                {
+                    Success = false,
+                    Code = convertedContentResponse.Code,
+                    Message = convertedContentResponse.Message
+                };
+            }
+
+            var (content, userPostImages) = convertedContentResponse.Data;
+
+            // Update existing post
+            existingPost.Title = model.Title;
+            existingPost.Category = model.Category;
+            existingPost.CategoryCD = model.CategoryCD;
+            existingPost.Content = content;
+            existingPost.LastUpdatedDate = DateTime.Now;
+
+            // Remove existing images
+            var existingImages = await _context.UserPostImages
+                .Where(i => i.PostId == postId)
+                .ToListAsync();
+            _context.UserPostImages.RemoveRange(existingImages);
+
+            // Add new images
+            foreach (var image in userPostImages)
+            {
+                image.PostId = postId;
+                _context.UserPostImages.Add(image);
+            }
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            foreach (var imageUrl in existingImageUrls)
+            {
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    var deleteResult = await _fileService.DeleteFile(imageUrl);
+                    if (!deleteResult.Success)
+                    {
+                        _logService.LogError("UpdatePost", $"Failed to delete file from S3: {imageUrl}", "");
+                    }
+                }
+            }
+
+            response.Success = true;
+            response.Data = postId;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            response.Success = false;
+            response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
+            _logService.LogError("EXCEPTION: UpdatePost", ex.Message, $"user id: {userId}, post id: {postId}");
+        }
+
+        return response;
+    }
+
+    private async Task<bool> CheckOwner(int userId, int postId)
+    {
+        var userPost = await _context.UserPosts
+            .FirstOrDefaultAsync(u => u.Id == postId && u.UserId == userId);
+
+        return userPost != null;
+    }
+
+    public async Task<ServiceResponse<bool>> DeletePost(int userId, int postId)
+    {
+        var response = new ServiceResponse<bool>();
+
+        bool isExistUser = await IsExistUser(userId);
+
+        if (isExistUser == false)
+        {
+            response.Success = false;
+            response.Code = MessageCode.Custom.NOT_FOUND_USER.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.NOT_FOUND_USER];
+            return response;
+        }
+
+        bool isOwner = await CheckOwner(userId, postId);
+
+        if (isOwner == false)
+        {
+            response.Success = false;
+            response.Code = MessageCode.Custom.UNAUTHORIZED.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.NOT_FOUND_USER];
+            return response;
+        }
+
+        var existingPost = await _context.UserPosts
+            .FirstOrDefaultAsync(p => p.Id == postId && p.UserId == userId);
+
+        if (existingPost == null)
+        {
+            response.Success = false;
+            response.Code = MessageCode.Custom.NOT_FOUND_POST.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.NOT_FOUND_POST];
+            return response;
+        }
+
+        var existingImageUrls = await _context.UserPostImages
+            .Where(i => i.PostId == postId)
+            .Select(i => i.StoragePath)
+            .ToListAsync();
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // Remove existing images from DB
+            var existingImages = await _context.UserPostImages
+                .Where(i => i.PostId == postId)
+                .ToListAsync();
+            _context.UserPostImages.RemoveRange(existingImages);
+
+            // Remove post
+            _context.UserPosts.Remove(existingPost);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            // Delete S3 files after successful transaction
+            foreach (var imageUrl in existingImageUrls)
+            {
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    var deleteResult = await _fileService.DeleteFile(imageUrl);
+                    if (!deleteResult.Success)
+                    {
+                        _logService.LogError("DeletePost", $"Failed to delete file from S3: {imageUrl}", "");
+                    }
+                }
+            }
+
+            response.Success = true;
+            response.Data = true;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            response.Success = false;
+            response.Code = MessageCode.Custom.UNKNOWN_ERROR.ToString();
+            response.Message = MessageCode.CustomMessages[MessageCode.Custom.UNKNOWN_ERROR];
+            _logService.LogError("EXCEPTION: DeletePost", ex.Message, $"user id: {userId}, post id: {postId}");
         }
 
         return response;

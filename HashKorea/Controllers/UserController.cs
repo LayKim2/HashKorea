@@ -50,6 +50,38 @@ public class UserController : Controller
         return Ok(response);
     }
 
+    [HttpPut("post")]
+    public async Task<IActionResult> UpdatePost([FromForm] PostRequestDto model)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userId = int.Parse(userIdClaim.Value);
+
+        var response = await _userService.UpdatePost(userId, model);
+
+        if (!response.Success)
+        {
+            return StatusCode(500, response);
+        }
+
+        return Ok(response);
+    }
+
+    [HttpDelete("post")]
+    public async Task<IActionResult> DeletePost(int postId)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userId = int.Parse(userIdClaim.Value);
+
+        var response = await _userService.DeletePost(userId, postId);
+
+        if (!response.Success)
+        {
+            return StatusCode(500, response);
+        }
+
+        return Ok(response);
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

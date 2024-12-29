@@ -4,6 +4,8 @@ namespace HashKorea.DTOs.User;
 
 public class PostRequestDto
 {
+    public int? PostId { get; set; }
+
     [Required]
     public string Type { get; set; }
     [Required]

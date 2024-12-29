@@ -6,6 +6,8 @@ using HashKorea.Services;
 
 namespace HashKorea.Controllers;
 
+[Route("api/community")]
+[ApiController]
 public class CommunityController : Controller
 {
     private readonly ILogger<CommunityController> _logger;
@@ -23,6 +25,7 @@ public class CommunityController : Controller
     }
 
 
+    [HttpGet("notice")]
     public async Task<IActionResult> Notice()
     {
         var response = await _commonService.GetPosts(POST_TYPE.NOTICE);
@@ -35,6 +38,7 @@ public class CommunityController : Controller
         return View(response.Data);
     }
 
+    [HttpGet("freeboard")]
     public async Task<IActionResult> FreeBoard()
     {
         var response = await _commonService.GetPosts(POST_TYPE.FREEBOARD);
@@ -47,6 +51,7 @@ public class CommunityController : Controller
         return View(response.Data);
     }
 
+    [HttpGet("qna")]
     public async Task<IActionResult> QnA()
     {
         var response = await _commonService.GetPosts(POST_TYPE.QNA);
