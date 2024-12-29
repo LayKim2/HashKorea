@@ -17,6 +17,8 @@ public class UserPost
     public string Type { get; set; } = string.Empty;
     [Required]
     public string Category { get; set; } = string.Empty;
+    [Required]
+    public string CategoryCD { get; set; } = string.Empty;
     public string MainImagePublicUrl { get; set; } = string.Empty;
     [Required]
     public string Title { get; set; } = string.Empty;

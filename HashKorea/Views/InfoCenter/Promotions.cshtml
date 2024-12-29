@@ -232,6 +232,7 @@
         @if (User.Identity.IsAuthenticated)
         {
             <form asp-area="" asp-controller="User" asp-action="Post" method="get">
+                <input type="hidden" name="type" value="Promotion" />
                 <button type="submit" class="post-button">Post</button>
             </form>
         }

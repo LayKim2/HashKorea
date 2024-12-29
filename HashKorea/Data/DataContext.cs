@@ -25,6 +25,7 @@ public class DataContext : DbContext
     #endregion
 
 
+    public DbSet<CommonCode> CommonCodes { get; set; }
     public DbSet<SystemLog> SystemLogs { get; set; }
 
 }

@@ -26,9 +26,11 @@ public class UserController : Controller
     }
 
     [HttpGet("post")]
-    public IActionResult Post()
+    public IActionResult Post(string type)
     {
         ViewBag.ReturnUrl = Request.Headers["Referer"].ToString();
+        ViewBag.Type = type;
+
         return View();
     }
 

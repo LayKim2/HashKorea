@@ -191,17 +191,14 @@
     </style>
 }
 
-<input type="hidden" id="returnUrl" value="@ViewBag.ReturnUrl" />
+<input type="hidden" id="hdnReturnUrl" value="@ViewBag.ReturnUrl" />
+<input type="hidden" id="hdntype" value="@ViewBag.Type" />
 
 <div class="modern-editor-container">
     <div class="editor-header">
         <div class="header-group">
-            <select class="category-select">
-                <option value="">Select Category</option>
-                <option value="Upcoming">Upcoming</option>
-                <option value="Current">Current</option>
-                <option value="Past">Past</option>
-                <option value="Other Information">Other Information</option>
+            <select id="categoryDropdown" class="category-select">
+                <option value="">Select a category</option>
             </select>
             <input type="text" class="title-input" placeholder="Enter title">
         </div>
@@ -258,14 +255,15 @@
         </div>
 
         <div class="toolbar-group">
-            <button class="toolbar-btn" data-command="insertImage"><i class="fas fa-image"></i></button>
+            <button id="btnInsertImage" class ="toolbar-btn"><i class="fas fa-image"></i></button>
+            <input type="file" id="imageInput" style="display: none;" accept="image/*">
             <button class="toolbar-btn" data-command="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
             <button class="toolbar-btn" data-command="insertOrderedList"><i class="fas fa-list-ol"></i></button>
         </div>
     </div>
 
     <div id="editor" class="editor-content" contenteditable="true" data-placeholder="Enter your content here...">
-        <p><br></p>
+        @* <p><br></p> *@
     </div>
 
     <div class="editor-footer">
@@ -276,6 +274,9 @@
 <script>
     // jQuery ready function
     $(document).ready(function() {
+
+        getCommonCodes($('#hdntype').val(), 'categoryDropdown');
+
         const $editor = $('#editor');
         const defaultColor = 'black';
         $editor.css('color', defaultColor);
@@ -324,7 +325,7 @@
             let isValid = true;
             const category = $('.category-select').val();
             const title = $('.title-input').val().trim();
-            const content = $('#editor').text().trim();
+            const content = $('#editor').html().trim();
 
             if (!category) {
                 $('.category-select').css('border-color', 'red');
@@ -356,12 +357,18 @@
             e.preventDefault();
 
             if (validateForm()) {
-                const category = $('.category-select').val();
+
+                $('#loadingSpinner').show();
+
+                const category = $("#categoryDropdown option:selected").text();
+                const categoryCD = $("#categoryDropdown").val();
+
                 const title = $('.title-input').val();
-                const content = $editor.html();
+                const content = $('#editor').html().trim();
 
                 const formData = new FormData();
                 formData.append('category', category);
+                formData.append('categoryCD', categoryCD);
                 formData.append('title', title);
                 formData.append('content', content);
 
@@ -388,6 +395,7 @@
                 formData.set('content', $editor.html());
 
                 try {
+
                     const response = await $.ajax({
                         url: '/api/user/post',
                         method: 'POST',
@@ -395,15 +403,19 @@
                         processData: false,
                         contentType: false
                     });
-                    console.log('Content saved successfully:', response);
 
                     blobUrls.forEach(URL.revokeObjectURL);
                     blobUrls = [];
-                    
-                    const returnUrl = $('#returnUrl').val() || '/';
+
+                    const returnUrl = $('#hdnReturnUrl').val() || '/';
+
                     window.location.href = returnUrl;
+
                 } catch (error) {
                     console.error('Failed to save content:', error);
+                }
+                finally {
+                    $('#loadingSpinner').hide();
                 }
             }
 
@@ -420,10 +432,19 @@
         document.execCommand(command, false, value);
     }
 
+    $('#btnInsertImage').click(function() {
+        $('#imageInput').click();
+    });
+
+    $('#imageInput').change(function() {
+        handleFiles(this.files);
+    });
+
     // Function to handle file uploads
     let blobUrls = [];
 
     function handleFiles(files) {
+
         $.each(files, function(i, file) {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
@@ -433,9 +454,11 @@
 
                     blobUrls.push(url);
 
-                    const img = document.createElement('img');
+                    const img = new Image();
+                    img.onload = function() {
+                        insertImageAtCursor(this);
+                    };
                     img.src = url;
-                    insertImageAtCursor(img);
                 };
                 reader.readAsArrayBuffer(file);
             }
@@ -444,16 +467,39 @@
 
     // Function to insert image at cursor position
     function insertImageAtCursor(img) {
+        const $editor = $('#editor');
+        $editor.focus();
+
         const selection = window.getSelection();
-        if (selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
-            range.insertNode(img);
-            range.collapse(false);
-            selection.removeAllRanges();
-            selection.addRange(range);
+        const range = document.createRange();
+
+        if (selection.rangeCount > 0 && $editor[0].contains(selection.anchorNode)) {
+            range.setStart(selection.anchorNode, selection.anchorOffset);
         } else {
-            $('#editor').append(img);
+            const lastChild = $editor[0].lastChild;
+            if (lastChild) {
+                if (lastChild.nodeType === Node.TEXT_NODE) {
+                    range.setStart(lastChild, lastChild.length);
+                } else {
+                    range.setStartAfter(lastChild);
+                }
+            } else {
+                range.setStart($editor[0], 0);
+            }
         }
+
+        range.insertNode(img);
+        range.collapse(false);
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        $editor[0].dispatchEvent(new Event('input', { bubbles: true }));
+
+        $editor.html($editor.html());
+
+        $editor.focus();
     }
+
 </script>
 

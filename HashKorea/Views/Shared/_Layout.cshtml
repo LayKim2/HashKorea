@@ -28,6 +28,14 @@
 </head>
 
 <body>
+    <div id="loadingSpinner" style="display: none;">
+        <div class="spinner-overlay"></div>
+        <div class="spinner-content">
+            <i class="fas fa-spinner fa-spin" style="font-size: 48px;"></i>
+            <p>Uploading...</p>
+        </div>
+    </div>
+
     @await Html.PartialAsync("_LoginPartial")
     <header>
         @await Html.PartialAsync("_TopMenuPartial")
@@ -48,6 +56,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/common.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

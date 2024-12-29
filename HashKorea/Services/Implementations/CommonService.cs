@@ -22,15 +22,15 @@ public class CommonService : ICommonService
         try
         {
             var posts = await _context.UserPosts
-                .Where(p => p.Type == type)
-                .Select(p => new GetPostsResponseDto
-                {
-                    Id = p.Id,
-                    Type = p.Type,
-                    Title = p.Title,
-                    Category = p.Category
-                })
-                .ToListAsync();
+                                .Where(p => p.Type == type)
+                                .Select(p => new GetPostsResponseDto
+                                {
+                                    Id = p.Id,
+                                    Type = p.Type,
+                                    Title = p.Title,
+                                    Category = p.Category
+                                })
+                                .ToListAsync();
 
             response.Data = posts;
             response.Success = true;

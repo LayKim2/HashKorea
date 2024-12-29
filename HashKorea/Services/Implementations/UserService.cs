@@ -48,6 +48,7 @@ public class UserService : IUserService
                 Title = model.Title,
                 Type = POST_TYPE.PROMOTION,
                 Category = model.Category,
+                CategoryCD = model.CategoryCD,
                 Content = content,
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now
