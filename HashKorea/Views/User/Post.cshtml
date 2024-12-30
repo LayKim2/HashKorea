@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HashKorea.DTOs.Common.GetPostDetailResponsetDto
+
+@{
     ViewData["Title"] = "Post";
 }
 
@@ -8,7 +10,9 @@
 }
 
 <input type="hidden" id="hdnReturnUrl" value="@ViewBag.ReturnUrl" />
-<input type="hidden" id="hdntype" value="@ViewBag.Type" />
+<input type="hidden" id="hdnType" value="@ViewBag.Type" />
+<input type="hidden" id="hdnPostId" value="@(Model?.Id ?? 0)" />
+<input type="hidden" id="hdnCategory" value="@(Model?.Category ?? string.Empty)" />
 
 <div class="modern-editor-container">
     <div class="editor-header">
@@ -16,7 +20,7 @@
             <select id="categoryDropdown" class="category-select">
                 <option value="">Select a category</option>
             </select>
-            <input type="text" class="title-input" placeholder="Enter title">
+            <input type="text" id="titleInput" class="title-input" placeholder="Enter title" value="@(Model?.Title ?? string.Empty)">
         </div>
     </div>
 
@@ -79,6 +83,7 @@
     </div>
 
     <div id="editor" class="editor-content" contenteditable="true" data-placeholder="Enter your content here...">
+        @Html.Raw(Model?.Content ?? string.Empty)
         @* <p><br></p> *@
     </div>
 
@@ -91,7 +96,7 @@
     // jQuery ready function
     $(document).ready(function() {
 
-        getCommonCodes($('#hdntype').val(), 'categoryDropdown');
+        getCommonCodes($('#hdnType').val(), 'categoryDropdown', $('#hdnCategory').val());
 
         const $editor = $('#editor');
         const defaultColor = 'black';
@@ -183,7 +188,8 @@
                 const content = $('#editor').html().trim();
 
                 const formData = new FormData();
-                formData.append('type', $('#hdntype').val());
+                formData.append('postId', $('#hdnPostId').val());
+                formData.append('type', $('#hdnType').val());
                 formData.append('category', category);
                 formData.append('categoryCD', categoryCD);
                 formData.append('title', title);
@@ -215,18 +221,13 @@
 
                     const response = await $.ajax({
                         url: '/api/user/post',
-                        method: 'POST',
+                        method: $('#hdnPostId').val() == 0 ? 'POST' : "PUT",
                         data: formData,
                         processData: false,
                         contentType: false
                     });
 
-                    blobUrls.forEach(URL.revokeObjectURL);
-                    blobUrls = [];
-
-                    const returnUrl = $('#hdnReturnUrl').val() || '/';
-
-                    window.location.href = returnUrl;
+                    window.location.href = $('#hdnReturnUrl').val() || '/';
 
                 } catch (error) {
                     console.error('Failed to save content:', error);

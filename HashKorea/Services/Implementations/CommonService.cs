@@ -69,6 +69,7 @@ public class CommonService : ICommonService
             var postDto = new GetPostDetailResponsetDto
             {
                 Id = post.Id,
+                Category = post.Category,
                 Title = post.Title,
                 Content = post.Content,
                 CreatedDate = post.CreatedDate,

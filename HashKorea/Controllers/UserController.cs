@@ -5,6 +5,8 @@ using HashKorea.Services;
 using System.Security.Claims;
 using HashKorea.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
+using HashKorea.DTOs.Common;
+using HashKorea.Responses;
 
 namespace HashKorea.Controllers;
 
@@ -14,10 +16,12 @@ namespace HashKorea.Controllers;
 public class UserController : Controller
 {
     private readonly IUserService _userService;
+    private readonly ICommonService _commonService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, ICommonService commonService)
     {
         _userService = userService;
+        _commonService = commonService;
     }
 
     public IActionResult Index()
@@ -25,13 +29,30 @@ public class UserController : Controller
         return View();
     }
 
+    // postId => O : edit, X : new
     [HttpGet("post")]
-    public IActionResult Post(string type)
+    public async Task<IActionResult> Post(string type, int? postId)
     {
         ViewBag.ReturnUrl = Request.Headers["Referer"].ToString();
         ViewBag.Type = type;
 
-        return View();
+        if (postId.HasValue)
+        {
+            // edit old one
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = int.Parse(userIdClaim.Value);
+
+            var response = await _commonService.GetPostDetail(userId, postId.Value);
+            
+            return View(response.Data);
+        }
+        else
+        {
+            var response = new ServiceResponse<GetPostDetailResponsetDto>();
+
+            // add new one
+            return View(response.Data);
+        }
     }
 
     [HttpPost("post")]

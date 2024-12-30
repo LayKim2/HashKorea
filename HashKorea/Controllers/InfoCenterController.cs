@@ -74,6 +74,8 @@ public class InfoCenterController : Controller
             return NotFound();
         }
 
+        ViewBag.Type = POST_TYPE.PROMOTION;
+
         return View("PostDetail", response.Data);
     }
 
@@ -93,6 +95,8 @@ public class InfoCenterController : Controller
         {
             return NotFound();
         }
+
+        ViewBag.Type = POST_TYPE.KOREAIS;
 
         return View("PostDetail", response.Data);
     }

@@ -2,7 +2,7 @@
 
 // 1. Get CommonCodes
 
-function getCommonCodes(type, targetDropdownId) {
+function getCommonCodes(type, targetDropdownId, currentCategory) {
     $.ajax({
         url: '/api/shared/commoncodes',
         type: 'GET',
@@ -10,7 +10,7 @@ function getCommonCodes(type, targetDropdownId) {
         success: function (response) {
             if (response.success) {
                 var commonCodes = response.data;
-                populateDropdown(commonCodes, targetDropdownId);
+                populateDropdown(commonCodes, targetDropdownId, currentCategory);
             } else {
                 alert('Failed to load common codes: ' + response.message);
             }
@@ -21,15 +21,20 @@ function getCommonCodes(type, targetDropdownId) {
     });
 }
 
-function populateDropdown(commonCodes, targetDropdownId) {
+function populateDropdown(commonCodes, targetDropdownId, currentCategory) {
     var $dropdown = $('#' + targetDropdownId);
     $dropdown.empty();
 
     $dropdown.append($('<option></option>').val('').text('Select a category'));
 
     $.each(commonCodes, function (index, code) {
-        $dropdown.append($('<option></option>').val(code.code).text(code.name));
+        var $option = $('<option></option>').val(code.code).text(code.name);
+        if (currentCategory && code.name === currentCategory) {
+            $option.prop('selected', true);
+        }
+        $dropdown.append($option);
     });
+
 }
 
 
